@@ -1,0 +1,17 @@
+{% comment %}
+  News items from _data/news.yml, newest first.
+  Usage: {% include news-list.html %} or {% include news-list.html limit=3 %}
+{% endcomment %}
+{% assign news_limit = include.limit | default: 1000 %}
+{% if site.data.news and site.data.news.size > 0 %}
+<ul class="dyn-news">
+  {% for item in site.data.news limit: news_limit %}
+  <li class="dyn-news__item">
+    <time class="dyn-news__date" datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: "%-d %b %Y" }}</time>
+    <span class="dyn-news__text">{{ item.text | markdownify | remove: '<p>' | remove: '</p>' | strip }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No news yet.</p>
+{% endif %}

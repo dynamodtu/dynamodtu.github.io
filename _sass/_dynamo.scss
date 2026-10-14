@@ -1,0 +1,137 @@
+/* ==========================================================================
+   DYNAMO group site
+   ========================================================================== */
+
+/* The site has no author sidebar, so centre the content column */
+.page,
+.archive {
+  @include breakpoint($large) {
+    float: none;
+    width: auto;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Header logo (set `logo:` in _config.yml) */
+.masthead__logo {
+  display: block;
+  height: 2.2em;
+  width: auto;
+}
+
+/* Home page */
+.dyn-hero {
+  padding: 2em 0 1.25em;
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid var(--global-border-color);
+
+  &__kicker {
+    margin: 0;
+    font-size: $type-size-6;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--global-base-color);
+  }
+
+  &__title {
+    margin: 0.15em 0 0;
+    font-size: 3em;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+  }
+
+  &__subtitle {
+    margin: 0.3em 0 0;
+    font-size: $type-size-4;
+    color: var(--global-text-color);
+  }
+}
+
+.dyn-lead {
+  font-size: $type-size-4;
+}
+
+.dyn-actions .btn {
+  margin: 0 0.4em 0.6em 0;
+}
+
+/* News list */
+.dyn-news {
+  margin: 0 0 1em;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    display: flex;
+    gap: 1em;
+    padding: 0.6em 0;
+    border-bottom: 1px solid var(--global-border-color);
+  }
+
+  &__date {
+    flex: 0 0 7.5em;
+    font-size: $type-size-6;
+    line-height: 1.9;
+    color: var(--global-base-color);
+    white-space: nowrap;
+  }
+}
+
+/* Member cards */
+.dyn-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5em;
+  margin-bottom: 2em;
+}
+
+.dyn-member {
+  text-align: center;
+
+  &__photo {
+    display: block;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 0.75em;
+    border-radius: 50%;
+    object-fit: cover;
+
+    &--empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      color: var(--global-text-color-light);
+      background: var(--global-border-color);
+    }
+  }
+
+  &__name {
+    margin: 0;
+    font-size: $type-size-5;
+  }
+
+  &__role {
+    margin: 0.2em 0 0;
+    font-size: $type-size-6;
+    color: var(--global-base-color);
+  }
+
+  &__bio {
+    margin: 0.5em 0 0;
+    font-size: $type-size-6;
+  }
+
+  &__links {
+    margin: 0.5em 0 0;
+
+    a {
+      margin: 0 0.3em;
+      font-size: 1.2em;
+    }
+  }
+}
