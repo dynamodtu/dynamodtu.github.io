@@ -1,0 +1,16 @@
+{%- comment -%}
+  An email link that keeps the address out of the page's code, to protect it from spam bots.
+  The page only contains the two halves of the address; assets/js/dyn-email.js joins them into a
+  working mailto: link once the page has loaded. Shown text uses " [at] " instead of "@".
+  Params:
+    address  - the email address (required)
+    class    - CSS class for the link (optional)
+    label    - accessible name / tooltip (optional, default "Email")
+    show     - true to show the address as text ("name [at] domain") after the icon/content
+    icon     - Font Awesome classes for an icon (optional)
+{%- endcomment -%}
+{%- assign email_parts = include.address | split: "@" -%}
+<a class="dyn-email{% if include.class %} {{ include.class }}{% endif %}" href="#" data-u="{{ email_parts[0] }}" data-d="{{ email_parts[1] }}" title="{{ include.label | default: 'Email' }}" aria-label="{{ include.label | default: 'Email' }}">
+  {%- if include.icon -%}<i class="{{ include.icon }}" aria-hidden="true"></i>{%- endif -%}
+  {%- if include.show -%}<span>{{ email_parts[0] }} [at] {{ email_parts[1] }}</span>{%- endif -%}
+</a>

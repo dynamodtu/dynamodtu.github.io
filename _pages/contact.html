@@ -1,0 +1,56 @@
+---
+title: "Contact & Join Us"
+permalink: /contact/
+hero: true
+# Everything shown on this page; edit here. Layout in the style of jeongresearch.org/contact.
+address:                       # postal address, one line each
+  - DYNAMO – Dynamic Biomedical Devices Group
+  - Technical University of Denmark (DTU)
+  - Department of Health Technology
+  - Ørsteds Plads, Building 345C
+  - DK-2800 Kongens Lyngby, Denmark
+address_local:                 # optional: the same address in another language, one line each
+map:                           # Google map (same free embed as erickchica.com)
+  query: "55.781499,12.51797"  # coordinates (DTU building 345) give a plain pin; a place name, e.g. "DTU Health Tech", adds Google's info card
+  zoom: 14                    # higher = closer (15 shows more of the campus, 17 just the building)
+applications:
+  intro:                       # optional paragraph above "Send directly to ..."
+  name: "Tijana"
+  email: "tijma@dtu.dk"
+---
+
+{% include base_path %}
+<div class="dyn-contact">
+  {% if page.map %}
+  {% comment %} Google Maps embed in the same form as erickchica.com's contact page (spaces as %20) {% endcomment %}
+  {% assign map_query = page.map.query | uri_escape | replace: ",", "%2C" %}
+  <div class="dyn-contact__map">
+    <iframe src="https://maps.google.com/maps?q={{ map_query }}&amp;t=&amp;z={{ page.map.zoom | default: 16 }}&amp;ie=UTF8&amp;iwloc=&amp;output=embed" title="Map: {{ page.address | join: ', ' }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  {% endif %}
+
+  <div class="dyn-contact__info">
+    <section class="dyn-contact__block">
+      <h2 class="dyn-contact__title"><b>General</b> enquiries</h2>
+      <p class="dyn-contact__label">Mailing address:</p>
+      <address>
+        {% for line in page.address %}{{ line }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}
+      </address>
+      {% if page.address_local and page.address_local.size > 0 %}
+      <address class="dyn-contact__local" lang="da">
+        {% for line in page.address_local %}{{ line }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}
+      </address>
+      {% endif %}
+    </section>
+
+    <section class="dyn-contact__block" id="join">
+      <h2 class="dyn-contact__title"><b>Position</b> applications</h2>
+      {% if page.applications.intro %}<p>{{ page.applications.intro }}</p>{% endif %}
+      {% if page.applications.email %}
+      <p>Send directly to {{ page.applications.name }}:<br>
+        {% include email-link.html address=page.applications.email label="Email" show=true %}
+      </p>
+      {% endif %}
+    </section>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+{%- comment -%}
+  A member's links (email, Google Scholar, ORCID, LinkedIn, website) as icons, or icons with labels.
+  Params: person (member document), class (CSS class for the wrapper), labels (true to show text labels)
+{%- endcomment -%}
+{%- assign p = include.person -%}
+{%- if p.email or p.scholar or p.orcid or p.linkedin or p.website -%}
+<p class="{{ include.class }}">
+  {%- if p.email %}{% capture email_label %}Email {{ p.name }}{% endcapture %}{% include email-link.html address=p.email icon="fas fa-fw fa-envelope" label=email_label show=include.labels %}{% endif -%}
+  {%- if p.scholar %}<a href="{{ p.scholar }}" aria-label="{{ p.name }} on Google Scholar"><i class="ai ai-fw ai-google-scholar" aria-hidden="true"></i>{% if include.labels %}<span>Google Scholar</span>{% endif %}</a>{% endif -%}
+  {%- if p.orcid %}<a href="{{ p.orcid }}" aria-label="{{ p.name }} on ORCID"><i class="ai ai-fw ai-orcid" aria-hidden="true"></i>{% if include.labels %}<span>ORCID</span>{% endif %}</a>{% endif -%}
+  {%- if p.linkedin %}<a href="{{ p.linkedin }}" aria-label="{{ p.name }} on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i>{% if include.labels %}<span>LinkedIn</span>{% endif %}</a>{% endif -%}
+  {%- if p.website %}<a href="{{ p.website }}" aria-label="Website of {{ p.name }}"><i class="fas fa-fw fa-link" aria-hidden="true"></i>{% if include.labels %}<span>Website</span>{% endif %}</a>{% endif -%}
+</p>
+{%- endif -%}

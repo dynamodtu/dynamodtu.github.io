@@ -1,0 +1,19 @@
+# Journal covers of papers that are not (yet) on the Publications page.
+# They show in the "Journal covers" column next to the journal articles, together with the covers of listed
+# papers (`cover_image:` in a paper's file), newest first. When a paper is added later, move its cover there
+# instead (cover_image + cover: true) and delete its entry here.
+#
+#   image:   /files/papers/<file>.jpg
+#   journal: journal name (used in the image description)
+#   date:    year-month-day of the issue (for the order)
+#   url:     link for the cover (optional), e.g. the cover's or the paper's DOI
+
+- image: /files/papers/cover-2023-small.jpg
+  journal: Small
+  date: 2023-04-01
+  url: https://doi.org/10.1002/smll.202370098      # "Microscopic Cascading Devices for Boosting Mucus Penetration in Oral Drug Delivery" (paper: 10.1002/smll.202206330)
+
+- image: /files/papers/cover-2018-adfm.jpg
+  journal: Advanced Functional Materials
+  date: 2018-10-04
+  url: https://doi.org/10.1002/adfm.201870291      # "Nanorobots Constructed from Nanoclay" (paper: 10.1002/adfm.201802762)

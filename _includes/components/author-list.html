@@ -1,0 +1,387 @@
+{% comment %}
+  Copied from erickchica.com (belgodie.github.io). DYNAMO change: authors are shown in bold when they
+  are group members, i.e. their key appears as `author_key:` in a file in _members/ (instead of
+  matching one fixed surname).
+{% endcomment %}
+{% assign record = include.item %}
+{% assign authors_source = include.authors | default: record.authors %}
+{% if authors_source %}
+  {% assign name_format = include.format | default: record.author_format | default: site.author_name_format | default: "last_first" %}
+  {% assign my_last_name = include.my_last_name | default: site.author.last | default: "" %}
+  {% assign member_keys = site.members | map: "author_key" | join: "," %}
+  {% comment %} DYNAMO: long author lists show the first `limit` names, plus any group member further down, then "et al." {% endcomment %}
+  {% assign author_limit = include.limit | default: site.publications_page.max_authors | default: 0 %}
+  {% assign skipped_any = false %}
+  {% assign gap_open = false %}
+  {% assign member_keys = "," | append: member_keys | append: "," %}
+  {% assign cofirst_flag = include.cofirst | default: record.cofirst %}
+  {% assign cofirst_number = include.cofirstnumber | default: record.cofirstnumber %}
+  {% assign corresponding_flag = include.corresponding | default: record.corresponding %}
+  {% assign corresponding_number = include.correspondingnumber | default: record.correspondingnumber %}
+  {% assign other_presenter_flag = include.otherpresenter | default: record.otherpresenter %}
+  {% assign other_presenter_number = include.otherpresenternumber | default: record.otherpresenternumber %}
+
+  {% assign authors_json = authors_source | jsonify %}
+  {% assign authors_json_first = authors_json | slice: 0, 1 %}
+  {% if authors_json_first == "[" %}
+    {% assign author_list = authors_source %}
+    {% assign structured_collection = true %}
+  {% else %}
+    {% assign author_list = authors_source | split: " and " %}
+    {% assign structured_collection = false %}
+  {% endif %}
+
+  {% assign author_count = author_list | size %}
+  {% assign formatted_authors = "" %}
+  {% assign registry = site.data.authors | default: {} %}
+  {% assign corresponding_positions = "," %}
+
+  {% if corresponding_flag == true and corresponding_number %}
+    {% assign corresponding_json = corresponding_number | jsonify %}
+    {% assign corresponding_json_first = corresponding_json | slice: 0, 1 %}
+    {% if corresponding_json_first == "[" %}
+      {% assign corresponding_entries = corresponding_number %}
+    {% else %}
+      {% assign corresponding_entries = corresponding_number | append: "" | split: "," %}
+    {% endif %}
+
+    {% for corresponding_entry in corresponding_entries %}
+      {% assign corresponding_clean = corresponding_entry | append: "" | strip %}
+      {% if corresponding_clean != "" %}
+        {% assign corresponding_positions = corresponding_positions | append: corresponding_clean | append: "," %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% for author in author_list %}
+    {% assign author_index = forloop.index %}
+    {% assign add_cofirst = false %}
+    {% if cofirst_flag == true and cofirst_number %}
+      {% if author_index <= cofirst_number %}
+        {% assign add_cofirst = true %}
+      {% endif %}
+    {% endif %}
+
+    {% assign add_corresponding = false %}
+    {% if corresponding_flag == true and corresponding_positions != "," %}
+      {% assign right_to_left_index = author_count | minus: author_index | plus: 1 %}
+      {% assign corresponding_token = "," | append: right_to_left_index | append: "," %}
+      {% if corresponding_positions contains corresponding_token %}
+        {% assign add_corresponding = true %}
+      {% endif %}
+    {% endif %}
+
+    {% assign underline_author = false %}
+    {% if other_presenter_flag == true and other_presenter_number %}
+      {% if author_index == other_presenter_number %}
+        {% assign underline_author = true %}
+      {% endif %}
+    {% endif %}
+
+    {% assign entry = author %}
+    {% assign entry_json = entry | jsonify %}
+    {% assign entry_type = entry_json | slice: 0, 1 %}
+    {% assign use_structured = structured_collection %}
+
+    {% if structured_collection and entry_type == "\"" %}
+      {% assign candidate_key = entry | strip %}
+      {% if registry[candidate_key] %}
+        {% assign use_structured = true %}
+      {% else %}
+        {% assign use_structured = false %}
+      {% endif %}
+    {% endif %}
+
+    {% assign raw_label = "" %}
+    {% assign last_for_highlight = "" %}
+    {% assign author_key = "" %}
+
+    {% if use_structured %}
+      {% assign author_key = "" %}
+      {% assign override_first = "" %}
+      {% assign override_middle = "" %}
+      {% assign override_last1 = "" %}
+      {% assign override_last2 = "" %}
+      {% assign override_display_first = "" %}
+      {% assign override_display_last = "" %}
+      {% assign variant = "" %}
+
+      {% if entry_type == "\"" %}
+        {% assign author_key = entry | strip %}
+      {% else %}
+        {% if entry_type == "[" and entry.size == 2 and entry[0] == "key" %}
+          {% assign author_key = entry[1] %}
+        {% else %}
+          {% for pair in entry %}
+            {% assign field = pair[0] | default: "" %}
+            {% assign value = pair[1] | default: "" %}
+            {% case field %}
+              {% when "key" %}
+                {% assign author_key = value %}
+              {% when "id" %}
+                {% if author_key == "" %}
+                  {% assign author_key = value %}
+                {% endif %}
+              {% when "first" %}
+                {% assign override_first = value %}
+              {% when "middle" %}
+                {% assign override_middle = value %}
+              {% when "last1" %}
+                {% assign override_last1 = value %}
+              {% when "last2" %}
+                {% assign override_last2 = value %}
+              {% when "last" %}
+                {% if override_last1 == "" %}
+                  {% assign override_last1 = value %}
+                {% endif %}
+              {% when "display_first" %}
+                {% assign override_display_first = value %}
+              {% when "display_last" %}
+                {% assign override_display_last = value %}
+              {% when "variant" %}
+                {% assign variant = value %}
+            {% endcase %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+
+      {% assign base = registry[author_key] %}
+      {% if base == nil and override_first == "" and override_last1 == "" %}
+        {% assign use_structured = false %}
+      {% else %}
+        {% assign first_name = override_first | default: base.first | default: "" %}
+        {% assign middle_name = override_middle | default: base.middle | default: "" %}
+        {% assign display_first_custom = override_display_first | default: base.display_first | default: "" %}
+        {% assign display_first = display_first_custom | default: first_name | default: middle_name | default: "" %}
+        {% assign last1 = override_last1 | default: base.last1 | default: base.last | default: "" %}
+        {% assign last2 = override_last2 | default: base.last2 | default: "" %}
+        {% assign display_last = override_display_last | default: base.display_last | default: "" %}
+        {% assign variant = variant | default: base.variant | default: "" %}
+
+        {% if display_last == "" %}
+          {% if variant == "hyphenated" and last2 != "" %}
+            {% assign display_last = last1 | append: "-" | append: last2 %}
+          {% elsif variant == "compound" and last2 != "" %}
+            {% assign display_last = last1 | append: " " | append: last2 %}
+          {% else %}
+            {% assign display_last = last1 %}
+          {% endif %}
+        {% endif %}
+
+        {% assign display_first = display_first | strip %}
+        {% assign display_last = display_last | strip %}
+
+        {% assign first_initial = "" %}
+        {% if display_first_custom != "" %}
+          {% assign first_source_clean = display_first_custom | replace: ".", " " | replace: "-", " " %}
+          {% assign first_source_parts = first_source_clean | strip | split: " " %}
+          {% for part in first_source_parts %}
+            {% assign trimmed_part = part | strip %}
+            {% if trimmed_part != "" %}
+              {% assign initial_char = trimmed_part | slice: 0, 1 | upcase %}
+              {% assign first_initial = first_initial | append: initial_char | append: "." %}
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          {% if first_name != "" %}
+            {% assign trimmed_first = first_name | strip %}
+            {% if trimmed_first != "" %}
+              {% assign initial_char = trimmed_first | slice: 0, 1 | upcase %}
+              {% assign first_initial = first_initial | append: initial_char | append: "." %}
+            {% endif %}
+          {% endif %}
+          {% if middle_name != "" %}
+            {% assign middle_clean = middle_name | replace: ".", " " | replace: "-", " " %}
+            {% assign middle_parts = middle_clean | strip | split: " " %}
+            {% for part in middle_parts %}
+              {% assign trimmed_part = part | strip %}
+              {% if trimmed_part != "" %}
+                {% assign initial_char = trimmed_part | slice: 0, 1 | upcase %}
+                {% assign first_initial = first_initial | append: initial_char | append: "." %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endif %}
+
+        {% assign raw_label = "" %}
+        {% case name_format %}
+          {% when "last_initial" %}
+            {% assign raw_label = display_last %}
+            {% if display_last != "" and first_initial != "" %}
+              {% assign raw_label = raw_label | append: ", " | append: first_initial %}
+            {% endif %}
+          {% when "initial_last" %}
+            {% assign raw_label = first_initial %}
+            {% if raw_label != "" and display_last != "" %}
+              {% assign raw_label = raw_label | append: " " | append: display_last %}
+            {% elsif raw_label == "" %}
+              {% assign raw_label = display_last %}
+            {% endif %}
+          {% when "last_first_nocomma" %}
+            {% assign raw_label = display_last %}
+            {% if display_first != "" %}
+              {% if raw_label != "" %}
+                {% assign raw_label = raw_label | append: " " %}
+              {% endif %}
+              {% assign raw_label = raw_label | append: display_first %}
+            {% endif %}
+          {% when "first_last" %}
+            {% assign raw_label = display_first %}
+                {% if display_first_custom == "" and middle_name != "" %}
+                  {% assign middle_clean = middle_name | replace: ".", " " | replace: "-", " " %}
+                  {% assign middle_parts = middle_clean | strip | split: " " %}
+                  {% for part in middle_parts %}
+                    {% assign trimmed_part = part | strip %}
+                    {% if trimmed_part != "" %}
+                      {% assign initial_char = trimmed_part | slice: 0, 1 | upcase %}
+                      {% assign raw_label = raw_label | append: " " | append: initial_char | append: "." %}
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                {% if display_last != "" %}
+                  {% if raw_label != "" %}
+                    {% assign raw_label = raw_label | append: " " %}
+                  {% endif %}
+                  {% assign raw_label = raw_label | append: display_last %}
+                {% endif %}
+          {% when "initials_only" %}
+            {% assign raw_label = first_initial %}
+          {% else %}
+            {% assign raw_label = display_last %}
+            {% if display_first != "" %}
+              {% if raw_label != "" %}
+                {% assign raw_label = raw_label | append: ", " %}
+              {% endif %}
+              {% assign raw_label = raw_label | append: display_first %}
+            {% endif %}
+          {% endcase %}
+
+        {% if raw_label == "" and author_key != "" %}
+          {% assign raw_label = author_key %}
+        {% endif %}
+        {% assign last_for_highlight = display_last %}
+      {% endif %}
+    {% endif %}
+
+    {% if raw_label == "" %}
+      {% assign author_trimmed = author | strip %}
+      {% assign name_parts = author_trimmed | split: ", " %}
+      {% assign last_name = name_parts[0] | strip %}
+      {% assign first_names_raw = name_parts[1] | default: "" | strip %}
+      {% assign first_initial = "" %}
+      {% if first_names_raw != "" %}
+        {% assign base_clean = first_names_raw | replace: ".", " " | replace: "-", " " %}
+        {% assign base_parts = base_clean | strip | split: " " %}
+        {% assign part_index = 0 %}
+        {% for part in base_parts %}
+          {% assign trimmed_part = part | strip %}
+          {% if trimmed_part != "" %}
+            {% assign initial_char = trimmed_part | slice: 0, 1 | upcase %}
+            {% if part_index == 0 %}
+              {% assign first_initial = initial_char | append: "." %}
+            {% else %}
+              {% assign first_initial = first_initial | append: initial_char | append: "." %}
+            {% endif %}
+            {% assign part_index = part_index | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% assign raw_label = "" %}
+      {% case name_format %}
+        {% when "last_initial" %}
+          {% assign raw_label = last_name %}
+          {% if last_name != "" and first_initial != "" %}
+            {% assign raw_label = raw_label | append: ", " | append: first_initial %}
+          {% endif %}
+        {% when "initial_last" %}
+          {% assign raw_label = first_initial %}
+          {% if raw_label != "" and last_name != "" %}
+            {% assign raw_label = raw_label | append: " " | append: last_name %}
+          {% elsif raw_label == "" %}
+            {% assign raw_label = last_name %}
+          {% endif %}
+        {% when "last_first_nocomma" %}
+          {% assign raw_label = last_name %}
+          {% if first_names_raw != "" %}
+            {% if raw_label != "" %}
+              {% assign raw_label = raw_label | append: " " %}
+            {% endif %}
+            {% assign raw_label = raw_label | append: first_names_raw %}
+          {% endif %}
+        {% when "first_last" %}
+          {% assign raw_label = first_names_raw %}
+          {% if last_name != "" %}
+            {% if raw_label != "" %}
+              {% assign raw_label = raw_label | append: " " %}
+            {% endif %}
+            {% assign raw_label = raw_label | append: last_name %}
+          {% endif %}
+        {% when "initials_only" %}
+          {% assign raw_label = first_initial %}
+        {% else %}
+          {% assign raw_label = last_name %}
+          {% if first_names_raw != "" %}
+            {% if raw_label != "" %}
+              {% assign raw_label = raw_label | append: ", " %}
+            {% endif %}
+            {% assign raw_label = raw_label | append: first_names_raw %}
+          {% endif %}
+        {% endcase %}
+
+      {% if raw_label == "" %}
+        {% assign raw_label = author_trimmed %}
+      {% endif %}
+      {% assign last_for_highlight = last_name %}
+    {% endif %}
+
+    {% assign formatted_author = raw_label %}
+    {% assign is_member = false %}
+    {% if author_key != "" %}
+      {% assign member_token = "," | append: author_key | append: "," %}
+      {% if member_keys contains member_token %}{% assign is_member = true %}{% endif %}
+    {% endif %}
+    {% if my_last_name != "" and last_for_highlight contains my_last_name %}{% assign is_member = true %}{% endif %}
+    {% if is_member %}
+      {% assign formatted_author = "<strong>" | append: raw_label | append: "</strong>" %}
+    {% endif %}
+
+    {% if underline_author %}
+      {% assign formatted_author = "<u>" | append: formatted_author | append: "</u>" %}
+    {% endif %}
+
+    {% if add_cofirst %}
+      {% assign formatted_author = formatted_author | append: "<sup>&dagger;</sup>" %}
+    {% endif %}
+    {% if add_corresponding %}
+      {% assign formatted_author = formatted_author | append: "<sup>*</sup>" %}
+    {% endif %}
+
+    {% comment %} Past the limit: skip everyone except group members (an ellipsis marks each gap) {% endcomment %}
+    {% assign show_author = true %}
+    {% if author_limit > 0 and author_count > author_limit and author_index > author_limit and is_member == false %}
+      {% assign show_author = false %}
+      {% assign skipped_any = true %}
+      {% assign gap_open = true %}
+    {% endif %}
+
+    {% if show_author %}
+      {% if gap_open %}
+        {% assign formatted_authors = formatted_authors | append: ", &hellip;" %}
+        {% assign gap_open = false %}
+      {% endif %}
+      {% if forloop.first %}
+        {% assign formatted_authors = formatted_author %}
+      {% elsif forloop.last and skipped_any == false %}
+        {% assign formatted_authors = formatted_authors | append: " & " | append: formatted_author %}
+      {% else %}
+        {% assign formatted_authors = formatted_authors | append: ", " | append: formatted_author %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if skipped_any %}
+    {% assign formatted_authors = formatted_authors | append: " et al." %}
+  {% endif %}
+
+  {{ formatted_authors }}
+{% endif %}

@@ -2,52 +2,480 @@
    DYNAMO group site
    ========================================================================== */
 
-/* The site has no author sidebar, so centre the content column */
+/* Colour palette (from solutionscapes.ca) */
+$dyn-primary: #124879;   // navy: sidebar, titles, headings, links (was teal #09809f)
+$dyn-accent: #f5b700;    // yellow: main button, current-page underline, small accents
+$dyn-dark: #111111;      // near-black: labels, secondary buttons, hover states
+$dyn-tint: #f8f9fb;      // very light grey-blue: page banners, empty photo placeholders
+$dyn-line: #e3e8ec;      // light grey lines
+$dyn-bg: #ffffff;        // page background
+$dyn-text: #3a3f44;      // body text
+
+/* Feed the palette into the template's colour settings (light mode only) */
+:root {
+  --global-base-color: #{$dyn-primary};
+  --global-bg-color: #{$dyn-bg};
+  --global-footer-bg-color: #{$dyn-tint};
+  --global-border-color: #{$dyn-line};
+  --global-dark-border-color: #c9d2d9;
+  --global-link-color: #{$dyn-primary};
+  --global-link-color-hover: #{$dyn-dark};
+  --global-link-color-visited: #{$dyn-primary};
+  --global-text-color: #{$dyn-text};
+  --global-text-color-light: #6b737a;
+  --global-thead-color: #{$dyn-tint};
+
+  --dyn-sidebar-bg: #{$dyn-primary};
+  --dyn-sidebar-text: #ffffff;
+  --dyn-sidebar-muted: rgba(255, 255, 255, 0.82);
+}
+
+// Layout proportions (large screens), the same at every window width:
+// the sidebar takes ~19% of the window (between 230 and 340px), and the content fills the rest
+// with a margin of 7.5% on each side, so it is always 85% wide and centred.
+$dyn-sidebar-width: clamp(230px, 18.8vw, 340px);
+$dyn-gutter: 7.5%;
+
+/* The template leaves room for its top menu bar, which this site replaces with the sidebar */
+body {
+  padding-top: 0;
+}
+
+/* Type hierarchy: big bold title and smaller headings in the main colour,
+   dark grey body text, highlights (**bold** in Markdown) in the main colour */
+.page__title {
+  font-size: $type-size-1;
+  font-weight: 800;
+  color: $dyn-primary;
+}
+
+.page__content,
+.archive {
+  h2,
+  h3,
+  h4 {
+    color: $dyn-primary;
+  }
+
+  strong {
+    color: $dyn-primary;
+  }
+}
+
+.btn:hover {
+  background-color: $dyn-dark;
+}
+
+/* Content: fills the column between the side margins (set on #main below) */
 .page,
 .archive {
   @include breakpoint($large) {
     float: none;
     width: auto;
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
     padding-left: 0;
     padding-right: 0;
   }
 }
 
-/* Header logo (set `logo:` in _config.yml) */
-.masthead__logo {
-  display: block;
-  height: 2.2em;
-  width: auto;
+.dyn-content {
+  /* a column as tall as the window at least, so the footer sits at the bottom even on short pages */
+  display: flex;
+  flex-direction: column;
+
+  @include breakpoint($large) {
+    min-height: 100vh;
+    margin-left: $dyn-sidebar-width;
+  }
+
+  > #main {
+    flex: 1 0 auto;
+    width: 100%;        /* in a flex column the template's auto margins would shrink it to its content */
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #main {
+    @include breakpoint($large) {
+      max-width: none;        /* the template caps it at 1280px; here it scales with the window */
+      padding-left: $dyn-gutter;
+      padding-right: $dyn-gutter;
+    }
+  }
 }
 
-/* Home page */
+/* Sidebar: fixed on the left on large screens (logo at the top, menu, icon links at the bottom),
+   a top bar with a menu button on small ones */
+.dyn-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  max-height: 100vh;
+  overflow-y: auto;
+  color: var(--dyn-sidebar-text);
+  background: var(--dyn-sidebar-bg);
+
+  @include breakpoint($large) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    width: $dyn-sidebar-width;
+    max-height: none;
+    padding: 2em 1.25em 1.5em;
+  }
+
+  a {
+    color: var(--dyn-sidebar-text);
+
+    &:hover,
+    &:focus {
+      color: var(--dyn-sidebar-text);
+      text-decoration: underline;
+    }
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    padding: 0.75em 1em;
+
+    @include breakpoint($large) {
+      padding: 0;
+    }
+  }
+
+  &__menu-btn {
+    padding: 0.2em 0.35em;
+    font-size: 1.25em;
+    line-height: 1;
+    color: var(--dyn-sidebar-text);
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    @include breakpoint($large) {
+      display: none;
+    }
+  }
+
+  &__brand {
+    display: block;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  &__name {
+    display: block;
+    font-size: 1.5em;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+  }
+
+  &__tagline {
+    display: none;
+    margin-top: 0.25em;
+    font-size: $type-size-6;
+    line-height: 1.4;
+    color: var(--dyn-sidebar-muted);
+
+    @include breakpoint($large) {
+      display: block;
+      margin-top: 0.6em; /* a little room under the logo */
+      font-size: 0.9em;
+    }
+  }
+
+  /* logo at the top: small in the phone top bar, full width of the sidebar on large screens */
+  &__logo {
+    display: block;
+    width: auto;
+    height: 46px;
+
+    @include breakpoint($large) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  /* Menu and icon links: hidden behind the menu button on small screens; on large screens a column
+     that fills the sidebar's height so the icon links can sit at the bottom */
+  &__body {
+    display: none;
+    padding: 0 1em 1.5em;
+
+    @include breakpoint($large) {
+      display: flex;
+      flex: 1 0 auto;
+      flex-direction: column;
+      padding: 0;
+    }
+  }
+
+  &__nav {
+    margin: 1.25em 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include breakpoint($large) {
+      margin-top: 2em;
+    }
+
+    li {
+      margin: 0;
+    }
+
+    a {
+      display: block;
+      padding: 0.3em 0;
+      text-decoration: none;
+    }
+
+    /* Current page: bold with a yellow underline */
+    a.is-current {
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-color: $dyn-accent;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 6px;
+    }
+  }
+
+  /* A menu item with a sub-menu: its link, plus a small button that opens the sub-menu */
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+  }
+
+  &__toggle {
+    flex: 0 0 auto;
+    width: 1.9em;
+    height: 1.9em;
+    padding: 0;
+    font-size: 0.8em;
+    color: var(--dyn-sidebar-muted);
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+
+    i {
+      transition: transform 0.2s;
+    }
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  /* Sub-menu: opens underneath its parent, inside the sidebar */
+  &__sub {
+    display: none;
+    margin: 0 0 0.4em 0.2em;
+    padding: 0 0 0 0.9em;
+    list-style: none;
+    font-size: 0.9em;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+
+    a {
+      padding: 0.2em 0;
+      color: var(--dyn-sidebar-muted);
+
+      &:hover,
+      &:focus {
+        color: #fff;
+      }
+    }
+  }
+
+  /* Round icon links (like under the name on erickchica.com), at the bottom of the sidebar
+     on large screens (like kireevlab.com) and at the end of the menu on phones */
+  &__social {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6em;
+    margin: 1.5em 0 0;
+
+    @include breakpoint($large) {
+      margin-top: auto; /* pushes the icons to the bottom */
+      padding-top: 1.5em;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.3em;
+      height: 2.3em;
+      font-size: 0.95em;
+      color: $dyn-primary;
+      text-decoration: none;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover,
+      &:focus {
+        color: $dyn-primary;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+      }
+    }
+  }
+}
+
+/* Phones: the menu button opens the sidebar body */
+@media (max-width: #{$large - 1px}) {
+  .dyn-sidebar.is-open .dyn-sidebar__body {
+    display: block;
+  }
+}
+
+/* An open sub-menu, and its button's arrow turned up */
+.dyn-sidebar__item-wrap.is-open > .dyn-sidebar__sub {
+  display: block;
+}
+
+.dyn-sidebar__item-wrap.is-open .dyn-sidebar__toggle i {
+  transform: rotate(180deg);
+}
+
+/* Leave room for the phone top bar when jumping to a section from the menu */
+h2[id] {
+  scroll-margin-top: 4.5em;
+
+  @include breakpoint($large) {
+    scroll-margin-top: 1em;
+  }
+}
+
+/* Note shown under an empty section */
+.dyn-empty {
+  color: var(--global-text-color-light);
+  font-style: italic;
+}
+
+/* Page banner: across the content area only (not the sidebar), above the page content.
+   Light grey-blue with a faint dot pattern, or a photo with a tint of the main colour when `hero.image` is set. */
 .dyn-hero {
-  padding: 2em 0 1.25em;
-  margin-bottom: 1.5em;
-  border-bottom: 1px solid var(--global-border-color);
+  position: relative;
+  overflow: hidden;
+  background: $dyn-tint;
+  border-bottom: 3px solid $dyn-accent;
+
+  /* faint dots in the main colour on the right, fading out to the left */
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    background-image: radial-gradient(circle, rgba($dyn-primary, 0.25) 1.6px, transparent 2px);
+    background-size: 18px 18px;
+    -webkit-mask-image: linear-gradient(to left, #000 15%, transparent);
+    mask-image: linear-gradient(to left, #000 15%, transparent);
+    pointer-events: none;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    padding: 2em 1em 1.75em;
+    text-align: center;
+
+    @include breakpoint($large) {
+      /* same side margins as the page below, so the title lines up with the content */
+      padding: 3.25em $dyn-gutter 2.75em;
+    }
+  }
+
 
   &__kicker {
-    margin: 0;
+    margin: 0 0 0.4em;
     font-size: $type-size-6;
+    font-weight: bold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--global-base-color);
+    color: $dyn-dark;
   }
 
   &__title {
-    margin: 0.15em 0 0;
-    font-size: 3em;
-    letter-spacing: 0.06em;
+    margin: 0;
+    font-size: 2.1em;
+    font-weight: 800;
+    letter-spacing: 0.02em;
     line-height: 1.1;
+    color: $dyn-primary;
+
+    @include breakpoint($large) {
+      font-size: 2.9em;
+    }
   }
 
   &__subtitle {
-    margin: 0.3em 0 0;
-    font-size: $type-size-4;
-    color: var(--global-text-color);
+    margin: 0.45em 0 0;
+    font-size: $type-size-5;
+    font-weight: 600;
+    color: $dyn-primary;
+
+    @include breakpoint($large) {
+      font-size: $type-size-4;
+    }
+  }
+
+  /* With a background photo: tint of the main colour so the white text stays readable */
+  &--image {
+    background-color: $dyn-primary;
+    background-position: center;
+    background-size: cover;
+
+    &::after {
+      left: 0;
+      width: auto;
+      background-image: linear-gradient(90deg, rgba($dyn-primary, 0.92) 0%, rgba($dyn-primary, 0.7) 55%, rgba($dyn-primary, 0.25) 100%);
+      background-size: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .dyn-hero__kicker,
+    .dyn-hero__title,
+    .dyn-hero__subtitle {
+      color: #fff;
+    }
+  }
+
+  /* Background video: fills the banner behind the tint (the tint is the ::after layer) */
+  &__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Visitors who ask their device to reduce motion see the still image instead of the video */
+@media (prefers-reduced-motion: reduce) {
+  .dyn-hero__video {
+    display: none;
   }
 }
 
@@ -55,8 +483,49 @@
   font-size: $type-size-4;
 }
 
-.dyn-actions .btn {
-  margin: 0 0.4em 0.6em 0;
+/* Rounded "pill" buttons, as on solutionscapes.ca */
+.dyn-actions {
+  a {
+    text-decoration: none;
+  }
+
+  .dyn-btn,
+  .dyn-btn-outline {
+    display: inline-block;
+    margin: 0 0.5em 0.75em 0;
+    padding: 0.7em 1.6em;
+    font-family: $sans-serif;
+    font-size: $type-size-6;
+    font-weight: bold;
+    border-radius: 999px;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  /* main button: yellow with black text */
+  .dyn-btn {
+    color: #000;
+    background: $dyn-accent;
+    border: 2px solid $dyn-accent;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background: $dyn-dark;
+      border-color: $dyn-dark;
+    }
+  }
+
+  /* secondary buttons: black outline */
+  .dyn-btn-outline {
+    color: $dyn-dark;
+    border: 2px solid $dyn-dark;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+      background: $dyn-dark;
+    }
+  }
 }
 
 /* News list */
@@ -75,63 +544,310 @@
   &__date {
     flex: 0 0 7.5em;
     font-size: $type-size-6;
+    font-weight: bold;
     line-height: 1.9;
-    color: var(--global-base-color);
+    color: $dyn-dark;
     white-space: nowrap;
   }
 }
 
-/* Member cards */
-.dyn-members {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5em;
-  margin-bottom: 2em;
+/* Members page: directory layout. Small uppercase section labels with a line, the professor large
+   with a round photo, everyone else as compact rows (photo, name/role/research, link icons).
+   Rules start with .dyn-people so they beat the page's own heading/paragraph styles. */
+@mixin dyn-initials($size) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $size;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, mix(#fff, $dyn-primary, 45%), $dyn-primary);
 }
 
-.dyn-member {
-  text-align: center;
+.dyn-people {
+  .dyn-people__heading {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin: 2.25em 0 1.25em;
+    padding: 0;
+    font-size: $type-size-6;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 0;
+    color: $dyn-primary;
 
-  &__photo {
-    display: block;
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 0.75em;
-    border-radius: 50%;
-    object-fit: cover;
-
-    &--empty {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3em;
-      color: var(--global-text-color-light);
-      background: var(--global-border-color);
+    &::after {
+      content: "";
+      flex: 1 1 auto;
+      height: 1px;
+      background: $dyn-line;
     }
   }
 
-  &__name {
+  .dyn-people__name {
     margin: 0;
-    font-size: $type-size-5;
+    font-size: 1.15em;
+    color: $dyn-dark;
   }
 
-  &__role {
-    margin: 0.2em 0 0;
-    font-size: $type-size-6;
-    color: var(--global-base-color);
+  .dyn-people__sub {
+    margin: 0.15em 0 0;
+    font-size: 0.85em;
+    color: $dyn-primary;
   }
 
-  &__bio {
-    margin: 0.5em 0 0;
-    font-size: $type-size-6;
+  /* professor, in the style of jeongresearch.org/current */
+  .dyn-pi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em 2.25em;
+    align-items: flex-start;
   }
 
-  &__links {
-    margin: 0.5em 0 0;
+  .dyn-pi__photo {
+    flex: 0 0 auto;
+    width: 240px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .dyn-pi__photo--empty {
+    @include dyn-initials(3em);
+  }
+
+  .dyn-pi__text {
+    flex: 1 1 320px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: $dyn-dark;
+
+    p {
+      margin: 0 0 1em;
+    }
+  }
+
+  .dyn-pi__name {
+    margin: 0 0 0.7em;
+    font-size: 1.7em;
+    font-weight: 300;
+    color: $dyn-dark;
+
+    b {
+      font-weight: 800;
+    }
+  }
+
+  .dyn-pi__text .dyn-pi__label {
+    margin-bottom: 0.2em;
+    font-weight: bold;
+  }
+
+  .dyn-pi__list {
+    margin: 0 0 1em;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      gap: 1em;
+      margin: 0;
+    }
+  }
+
+  .dyn-pi__year {
+    flex: 0 0 8em;
+    white-space: nowrap;
+  }
+
+  .dyn-pi__contact > span {
+    display: block; /* one line each for Email / Office / Phone */
+  }
+
+  .dyn-pi__links a {
+    margin-right: 1.25em;
+    font-size: 0.9em;
+    white-space: nowrap;
+  }
+
+  /* everyone else */
+  .dyn-people__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dyn-people__row {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+    gap: 0.5em 1.25em;
+    align-items: center;
+    margin: 0;
+    padding: 1em 0;
+    border-bottom: 1px solid $dyn-line;
+
+    &:first-child {
+      border-top: 1px solid $dyn-line;
+    }
+  }
+
+  .dyn-people__avatar {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .dyn-people__avatar--empty {
+    @include dyn-initials(1.3em);
+  }
+
+  .dyn-people__research {
+    margin: 0.3em 0 0;
+    font-size: 0.85em;
+  }
+
+  .dyn-people__icons {
+    margin: 0;
+    white-space: nowrap;
 
     a {
-      margin: 0 0.3em;
+      margin-left: 0.6em;
       font-size: 1.2em;
+      color: $dyn-primary;
     }
+  }
+}
+
+/* Footer: one line of small grey text and the DTU logo, under a thin line, with the same side margins as the content */
+.dyn-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em 2em;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 3em;
+  padding: 1.5em 1em;
+  border-top: 1px solid $dyn-line;
+
+  @include breakpoint($large) {
+    padding: 1.5em $dyn-gutter 1.75em;
+  }
+
+  .dyn-footer__text {
+    margin: 0;
+    font-size: $type-size-6;
+    color: var(--global-text-color-light);
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-color: $dyn-line;
+      text-underline-offset: 3px;
+
+      &:hover,
+      &:focus {
+        color: $dyn-primary;
+        text-decoration-color: currentColor;
+      }
+    }
+  }
+
+  .dyn-footer__logos {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 1.75em;
+  }
+
+  /* every logo the same height */
+  .dyn-footer__logo {
+    display: block;
+
+    img {
+      display: block;
+      width: auto;
+      height: 44px;
+    }
+  }
+}
+
+/* Contact page, in the style of jeongresearch.org/contact: map on the left, address and applications on the right */
+.dyn-contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2em 3em;
+
+  @include breakpoint($medium) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch; /* both columns as tall as the taller one (the text) */
+  }
+
+  /* map: fixed height on phones (above the text); beside the text it fills exactly the text's height */
+  .dyn-contact__map {
+    position: relative;
+    min-height: 300px;
+  }
+
+  .dyn-contact__map iframe {
+    display: block;
+    width: 100%;
+    height: 300px;
+    border: 1px solid $dyn-line;
+
+    @include breakpoint($medium) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+    }
+  }
+
+  /* no spacing after the last line, so the text's bottom edge is the map's bottom edge */
+  .dyn-contact__block:last-child > :last-child {
+    margin-bottom: 0;
+  }
+
+  .dyn-contact__map .dyn-contact__map-link {
+    margin: 0.5em 0 0;
+    font-size: $type-size-6;
+  }
+
+  .dyn-contact__block + .dyn-contact__block {
+    margin-top: 2.5em;
+  }
+
+  /* "General enquiries": first word bold, the rest light */
+  .dyn-contact__title {
+    margin: 0 0 0.8em;
+    padding: 0;
+    font-size: 1.6em;
+    font-weight: 300;
+    border: 0;
+    color: $dyn-dark;
+
+    b {
+      font-weight: 800;
+    }
+  }
+
+  .dyn-contact__label {
+    margin: 0 0 0.6em;
+    font-weight: bold;
+    color: $dyn-dark;
+  }
+
+  p,
+  address {
+    margin: 0 0 1em;
+    font-size: 0.95em;
+    font-style: normal;
+    line-height: 1.6;
+  }
+
+  .dyn-contact__local {
+    color: var(--global-text-color-light);
   }
 }

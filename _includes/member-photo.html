@@ -1,0 +1,12 @@
+{%- comment -%}
+  A member's photo, or their initials when there is no photo.
+  Params: person (member document), class (CSS class; the initials version also gets class--empty)
+{%- endcomment -%}
+{%- include base_path -%}
+{%- assign p = include.person -%}
+{%- if p.photo -%}
+<img class="{{ include.class }}" src="{% if p.photo contains '://' %}{{ p.photo }}{% else %}{{ base_path }}{{ p.photo }}{% endif %}" alt="{{ p.name }}" loading="lazy">
+{%- else -%}
+{%- assign name_parts = p.name | split: " " -%}
+<div class="{{ include.class }} {{ include.class }}--empty" aria-hidden="true">{{ name_parts.first | slice: 0, 1 }}{% if name_parts.size > 1 %}{{ name_parts.last | slice: 0, 1 }}{% endif %}</div>
+{%- endif -%}

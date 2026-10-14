@@ -1,0 +1,32 @@
+{% comment %}
+  One paper on the Publications page, in the style of jeongresearch.org/publications:
+  figure on the left (when the paper has `thumbnail:`; cropped to a 4:3 frame, `thumbnail_position:` e.g. top
+  picks the part that stays visible), then the title as a link, the authors,
+  and "Journal volume(issue), pages (year)." Reads the same fields as erickchica.com's paper files.
+  Param: item (publication document)
+{% endcomment %}
+{% assign pub = include.item %}
+{% assign thumb = pub.thumbnail | default: "" %}
+{% assign author_format = pub.author_format | default: site.publications_page.author_format | default: site.author_name_format %}
+{% capture authors %}{% include components/author-list.html item=pub format=author_format %}{% endcapture %}
+{% capture citation %}{% include components/pub-volume.html item=pub %}{% endcapture %}
+{% assign citation = citation | strip %}
+<li class="dyn-pub{% if thumb == '' %} dyn-pub--text{% endif %}">
+  {% if thumb != '' %}
+    {% if pub.paperurl %}<a class="dyn-pub__thumb" href="{{ pub.paperurl }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">{% else %}<div class="dyn-pub__thumb">{% endif %}
+      <img src="{{ thumb | relative_url }}" alt="" loading="lazy"{% if pub.thumbnail_position %} style="object-position: {{ pub.thumbnail_position }};"{% endif %}>
+    {% if pub.paperurl %}</a>{% else %}</div>{% endif %}
+  {% endif %}
+  <div class="dyn-pub__body">
+    <p class="dyn-pub__title">
+      {% if pub.paperurl %}<a href="{{ pub.paperurl }}" target="_blank" rel="noopener">{{ pub.title }}</a>{% else %}{{ pub.title }}{% endif %}
+      {% if pub.sample %}<span class="dyn-pub__sample">sample</span>{% endif %}
+    </p>
+    <p class="dyn-pub__authors">{{ authors | strip }}</p>
+    <p class="dyn-pub__venue">
+      <b><i>{{ pub.venue | default: pub.short }}</i></b>{% if citation != "" %} {{ citation }}{% endif %}{% if pub.status %} ({{ pub.status }}){% else %} ({{ pub.date | date: "%Y" }}){% endif %}.
+      {% if pub.cover %}<span class="dyn-pub__cover">{% if pub.cover == true %}Cover Feature{% else %}{{ pub.cover }}{% endif %}</span>{% endif %}
+      {% if pub.pdf %}<a class="dyn-pub__pdf" href="{{ pub.pdf | relative_url }}" target="_blank" rel="noopener"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</a>{% endif %}
+    </p>
+  </div>
+</li>
