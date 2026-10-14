@@ -1,0 +1,16 @@
+---
+title: "Members"
+permalink: /members/
+---
+
+{% comment %}The people are listed in _data/members.yml.{% endcomment %}
+{% for group in site.data.members %}
+  {% if group.people and group.people.size > 0 %}
+  <h2>{{ group.section }}</h2>
+  <div class="dyn-members">
+    {% for person in group.people %}
+      {% include member-card.html person=person %}
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endfor %}

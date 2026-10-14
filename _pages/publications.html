@@ -2,18 +2,19 @@
 layout: archive
 title: "Publications"
 permalink: /publications/
-author_profile: true
 ---
-
-{% if site.author.googlescholar %}
-  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
-{% endif %}
 
 {% include base_path %}
 
-<!-- New style rendering if publication categories are defined -->
-{% if site.publication_category %}
-  {% for category in site.publication_category  %}
+{% if site.author.googlescholar %}
+  <p class="wordwrap">For a complete list, see <a href="{{ site.author.googlescholar }}">Tijana Miseljic's Google Scholar profile</a>.</p>
+{% endif %}
+
+{% if site.publications.size == 0 %}
+  <p>The group's publications will be listed here soon.</p>
+{% elsif site.publication_category %}
+  <!-- Grouped by the `category` field of each publication -->
+  {% for category in site.publication_category %}
     {% assign title_shown = false %}
     {% for post in site.publications reversed %}
       {% if post.category != category[0] %}
@@ -31,6 +32,3 @@ author_profile: true
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}
-
-
-
