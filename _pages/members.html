@@ -1,16 +1,84 @@
 ---
 title: "Members"
 permalink: /members/
+hero: true
 ---
 
-{% comment %}The people are listed in _data/members.yml.{% endcomment %}
-{% for group in site.data.members %}
-  {% if group.people and group.people.size > 0 %}
-  <h2>{{ group.section }}</h2>
-  <div class="dyn-members">
-    {% for person in group.people %}
-      {% include member-card.html person=person %}
+{% include base_path %}
+{% comment %}
+  Directory layout. One file per person in _members/. Sections and their order come from
+  member_sections in _config.yml; each person's `section:` says where they go and `order:` sorts them.
+  The section with `layout: profile` shows each person large, with their details lists.
+{% endcomment %}
+<div class="dyn-people">
+{% for section in site.member_sections %}
+  <h2 id="{{ section.id }}" class="dyn-people__heading"><span>{{ section.title }}</span></h2>
+  {% assign people = site.members | where: "section", section.id | sort: "order", "last" %}
+  {% if people.size == 0 %}
+    {% if section.empty %}
+    <p class="dyn-empty">{{ section.empty }}</p>
+    {% else %}
+    <p class="dyn-empty">None at the moment. Interested in joining? See <a href="{{ base_path }}/contact/">Contact &amp; Join Us</a>.</p>
+    {% endif %}
+  {% elsif section.layout == 'profile' %}
+    {% comment %} Professor, in the style of jeongresearch.org/current: photo; name (surname bold); titles; degrees; lists; email and office {% endcomment %}
+    {% for p in people %}
+    {% assign name_parts = p.name | split: " " %}
+    {% if p.last_name %}
+      {% assign surname = p.last_name %}{% assign given = p.name | replace: p.last_name, "" | strip %}
+    {% else %}
+      {% assign surname = name_parts.last %}{% assign given_count = name_parts.size | minus: 1 %}{% assign given = "" %}
+      {% for part in name_parts limit: given_count %}{% assign given = given | append: part | append: " " %}{% endfor %}
+      {% assign given = given | strip %}
+    {% endif %}
+    <article class="dyn-pi">
+      {% include member-photo.html person=p class="dyn-pi__photo" %}
+      <div class="dyn-pi__text">
+        <h3 class="dyn-pi__name">{{ given }} <b>{{ surname }}</b></h3>
+        <p class="dyn-pi__titles">
+          {% if p.role %}{{ p.role }}{% endif %}
+          {% if p.affiliation.first %}{% for line in p.affiliation %}<br>{{ line }}{% endfor %}{% elsif p.affiliation %}<br>{{ p.affiliation }}{% endif %}
+        </p>
+        {% if p.degrees %}
+        <p class="dyn-pi__degrees">{% for line in p.degrees %}{{ line }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p>
+        {% endif %}
+        {% assign bio = p.content | strip %}{% if bio != "" %}<div class="dyn-pi__bio">{{ p.content | markdownify }}</div>{% endif %}
+        {% for block in p.details %}{% if block.items and block.items.size > 0 %}
+        <p class="dyn-pi__label">{{ block.title }}:</p>
+        <ul class="dyn-pi__list">{% for item in block.items %}<li><span class="dyn-pi__year">{{ item.year }}</span><span>{{ item.text }}</span></li>{% endfor %}</ul>
+        {% endif %}{% endfor %}
+        {% if p.email or p.office or p.phone %}
+        <p class="dyn-pi__contact">
+          {% if p.email %}<span><b>Email:</b> {% include email-link.html address=p.email label="Email" show=true %}</span>{% endif %}
+          {% if p.office %}<span><b>Office:</b> {{ p.office }}</span>{% endif %}
+          {% if p.phone %}<span><b>Phone:</b> {{ p.phone }}</span>{% endif %}
+        </p>
+        {% endif %}
+        {% if p.scholar or p.orcid or p.linkedin or p.website %}
+        <p class="dyn-pi__links">
+          {% if p.scholar %}<a href="{{ p.scholar }}" target="_blank" rel="noopener"><i class="ai ai-google-scholar" aria-hidden="true"></i> Google Scholar</a>{% endif %}
+          {% if p.orcid %}<a href="{{ p.orcid }}" target="_blank" rel="noopener"><i class="ai ai-orcid" aria-hidden="true"></i> ORCID</a>{% endif %}
+          {% if p.linkedin %}<a href="{{ p.linkedin }}" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn</a>{% endif %}
+          {% if p.website %}<a href="{{ p.website }}" target="_blank" rel="noopener"><i class="fas fa-link" aria-hidden="true"></i> Website</a>{% endif %}
+        </p>
+        {% endif %}
+      </div>
+    </article>
     {% endfor %}
-  </div>
+  {% else %}
+    <ul class="dyn-people__list">
+      {% for p in people %}
+      <li class="dyn-people__row">
+        {% include member-photo.html person=p class="dyn-people__avatar" %}
+        <div class="dyn-people__who">
+          <h3 class="dyn-people__name">{{ p.name }}</h3>
+          {% if p.role %}<p class="dyn-people__sub">{{ p.role }}</p>{% endif %}
+          {% if p.research %}<p class="dyn-people__research">{{ p.research }}</p>{% endif %}
+        </div>
+        {% include member-links.html person=p class="dyn-people__icons" %}
+      </li>
+      {% endfor %}
+    </ul>
   {% endif %}
 {% endfor %}
+</div>

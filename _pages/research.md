@@ -1,16 +1,23 @@
 ---
 title: "Research"
 permalink: /research/
+hero: true
 ---
 
 <!--
-TODO: describe the group's research. A simple structure is one heading per theme:
+One section per research area. Each heading's {#id} is linked from the Research
+sub-menu (see _data/navigation.yml), so keep the ids unchanged if you rename a heading.
+A figure can be added with:
 
-## Theme name
-
-One or two paragraphs about the theme, optionally with a figure:
-
-![Short description of the figure](/images/research/theme-name.jpg)
+![Short description of the figure](/images/research/file-name.jpg)
 -->
 
-Descriptions of the group's research themes and projects are coming soon. In the meantime, see our [publications](/publications/).
+## Metal-based microrobots {#metal-based-microrobots}
+
+<!-- TODO: describe this research area. -->
+Description coming soon.
+
+## Polymer-based microrobots {#polymer-based-microrobots}
+
+<!-- TODO: describe this research area. -->
+Description coming soon.

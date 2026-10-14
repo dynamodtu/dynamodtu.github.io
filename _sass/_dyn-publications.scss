@@ -1,0 +1,252 @@
+/* ==========================================================================
+   Publications page, in the style of jeongresearch.org/publications:
+   large light section headings, one entry per paper (figure left, title link, authors,
+   bold-italic journal) separated by thin lines, and a column of journal covers on the right.
+   (_pages/publications.html, _includes/cards/publication-entry.html)
+   Rules start with .dyn-pubs so they beat the page's own heading/paragraph styles.
+   ========================================================================== */
+
+.dyn-pubs {
+  /* year groups and covers side by side on large screens (covers below on smaller ones);
+     both columns start with a heading of the same style, so the first paper and the first cover line up */
+  .dyn-pubs__cols--covers {
+    @include breakpoint($large) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 230px;
+      gap: 2.5em;
+      align-items: start;
+    }
+  }
+
+
+  /* the first heading starts right at the top (the space above the page is already there) */
+  .dyn-pubs__category:first-child .dyn-pubs__cat {
+    margin-top: 0;
+  }
+
+  .dyn-pubs__cat {
+    margin: 1em 0 0.6em;
+    padding: 0;
+    font-size: 2em;
+    font-weight: 300;
+    border: 0;
+    color: $dyn-primary;
+  }
+
+  /* year filter bar (shown by assets/js/dyn-pub-years.js) */
+  .dyn-years {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em 1.1em;
+    margin: 0 0 1.5em;
+    padding: 0.7em 0;
+    border-top: 1px solid $dyn-line;
+    border-bottom: 1px solid $dyn-line;
+
+    &[hidden] {
+      display: none;
+    }
+
+    button {
+      padding: 0.1em 0;
+      font: inherit;
+      font-size: 0.9em;
+      color: var(--global-text-color-light);
+      background: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+
+      &:hover {
+        color: $dyn-dark;
+      }
+
+      &[aria-pressed="true"] {
+        font-weight: bold;
+        color: $dyn-dark;
+        border-bottom-color: $dyn-accent;
+      }
+    }
+  }
+
+  /* year heading with a solid line underneath */
+  .dyn-pubs__year {
+    margin: 1.25em 0 0;
+    padding: 0 0 0.35em;
+    font-size: 1.45em;
+    font-weight: 500;
+    color: $dyn-dark;
+    border-bottom: 2px solid $dyn-dark;
+  }
+
+  .dyn-pubs__year-group[hidden] {
+    display: none;
+  }
+
+  .dyn-pubs__list {
+    margin: 0 0 1.5em;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* one paper */
+  .dyn-pub {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em 1.75em;
+    align-items: center;
+    margin: 0;
+    padding: 1.4em 0;
+    border-bottom: 1px solid $dyn-line;
+
+    @include breakpoint($medium) {
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+
+  }
+
+  .dyn-pub--text {
+    @include breakpoint($medium) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* figure in the same 4:3 frame for every paper, cropped to fill it (per paper: thumbnail_position) */
+  .dyn-pub__thumb {
+    display: block;
+    max-width: 360px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid $dyn-line;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .dyn-pub__body p {
+    margin: 0;
+  }
+
+  .dyn-pub__title {
+    font-size: 0.98em;
+    font-weight: 600;
+    line-height: 1.45;
+
+    a {
+      color: $dyn-primary;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .dyn-pub__authors {
+    margin-top: 0.15em;
+    font-size: 0.88em;
+    line-height: 1.5;
+    color: $dyn-text;
+
+    strong {
+      color: $dyn-dark;
+    }
+  }
+
+  .dyn-pub__venue {
+    margin-top: 0.1em;
+    font-size: 0.88em;
+    color: $dyn-text;
+
+    b {
+      color: $dyn-dark;
+    }
+  }
+
+  .dyn-pub__cover {
+    margin-left: 0.4em;
+    padding: 0.05em 0.6em;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #000;
+    background: $dyn-accent;
+    border-radius: 999px;
+  }
+
+  .dyn-pub__pdf,
+  .dyn-pub__cover {
+    white-space: nowrap; /* keep the icon and its label together */
+  }
+
+  .dyn-pub__pdf {
+    margin-left: 0.6em;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    color: $dyn-primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* TEMPORARY tag on sample papers (publications_page.show_samples in _config.yml) */
+  .dyn-pub__sample {
+    margin-left: 0.4em;
+    padding: 0.05em 0.5em;
+    font-size: 0.7em;
+    font-weight: bold;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: 0.15em;
+    color: var(--global-text-color-light);
+    border: 1px dashed var(--global-text-color-light);
+    border-radius: 3px;
+  }
+
+  /* journal covers column: heading styled like the year headings, no box; follows the page on large screens */
+  .dyn-pubs__covers {
+    @include breakpoint($large) {
+      position: sticky;
+      top: 1.5em;
+    }
+  }
+
+  .dyn-pubs__cover-list {
+    padding-top: 1.4em; /* same as the space above each paper, so the first cover and first paper line up */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5em;
+
+    @include breakpoint($large) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .dyn-pubs__cover {
+    margin: 0;
+
+    a {
+      display: block;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      box-shadow: 0 6px 18px rgba(17, 17, 17, 0.18);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    a:hover img {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(17, 17, 17, 0.22);
+    }
+  }
+}

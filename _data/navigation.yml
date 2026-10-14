@@ -1,5 +1,7 @@
-# The links in the header of the website, in order.
-# Removing a link hides it from the header, but does not remove the page itself.
+# The links in the sidebar menu, in order.
+# `children` adds a sub-menu (shown to the right on hover on large screens, indented on phones).
+# Sub-menu links point to a section of the page: /page/#section-id
+# Removing a link hides it from the menu, but does not remove the page itself.
 
 main:
   - title: "Home"
@@ -7,12 +9,31 @@ main:
 
   - title: "Research"
     url: /research/
+    children:
+      - title: "Metal-based microrobots"
+        url: /research/#metal-based-microrobots
+      - title: "Polymer-based microrobots"
+        url: /research/#polymer-based-microrobots
 
   - title: "Publications"
     url: /publications/
+    children:
+      - title: "Journal articles"
+        url: /publications/#journals
+      - title: "Conference papers"
+        url: /publications/#conferences
 
   - title: "Members"
     url: /members/
+    children:
+      - title: "Professor"
+        url: /members/#professor
+      - title: "Ph.D. Students"
+        url: /members/#phd-students
+      - title: "M.S. & B.S. Students"
+        url: /members/#masters-bachelors
+      - title: "Alumni"
+        url: /members/#alumni
 
   - title: "News & Resources"
     url: /news/

@@ -14,18 +14,17 @@ layout: compress
   <body>
 
     {% include browser-upgrade.html %}
-    {% include masthead.html %}
+    {% include dyn-sidebar.html %}
 
-    {{ content }}
-
-    <div class="page__footer">
-      <footer>
-        {% include footer/custom.html %}
-        {% include footer.html %}
-      </footer>
+    <div class="dyn-content">
+      {% if page.hero %}{% include dyn-hero.html %}{% endif %}
+      {{ content }}
+      {% include dyn-footer.html %}
     </div>
 
     {% include scripts.html %}
+    <script src="{{ base_path }}/assets/js/dyn-sidebar.js" defer></script>
+    <script src="{{ base_path }}/assets/js/dyn-email.js" defer></script>
 
   </body>
 </html>

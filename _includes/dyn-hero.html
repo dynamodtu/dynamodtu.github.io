@@ -1,0 +1,34 @@
+{% comment %}
+  Banner at the top of a page's content area. Set it in the page's front matter:
+
+  hero:
+    kicker: "Small label above the title"      (optional)
+    title: "Title"                             (optional, defaults to the page title)
+    subtitle: "One short line under the title" (optional)
+    image: /images/hero/file-name.jpg          (optional background photo)
+    video: /images/hero/file-name.mp4          (optional background video: muted, looping, .mp4 or .webm)
+    poster: /images/hero/file-name.jpg         (optional still shown while the video loads; defaults to `image`)
+
+  With a video, `poster` (or `image`) is also what visitors see if their device is set to reduce motion.
+{% endcomment %}
+{% include base_path %}
+{% assign hero = page.hero %}
+{% assign hero_title = hero.title | default: page.title %}
+{% assign hero_still = hero.poster | default: hero.image %}
+{% if hero_still %}
+  {% if hero_still contains '://' %}{% assign hero_still_url = hero_still %}{% else %}{% assign hero_still_url = base_path | append: hero_still %}{% endif %}
+{% endif %}
+<header class="dyn-hero{% if hero_still or hero.video %} dyn-hero--image{% endif %}"{% if hero_still %} style="background-image: url('{{ hero_still_url }}');"{% endif %}>
+  {% if hero.video %}
+    {% if hero.video contains '://' %}{% assign hero_video_url = hero.video %}{% else %}{% assign hero_video_url = base_path | append: hero.video %}{% endif %}
+    {% assign hero_video_ext = hero.video | split: '.' | last | downcase %}
+    <video class="dyn-hero__video" autoplay muted loop playsinline preload="auto" aria-hidden="true"{% if hero_still %} poster="{{ hero_still_url }}"{% endif %}>
+      <source src="{{ hero_video_url }}" type="video/{% if hero_video_ext == 'webm' %}webm{% else %}mp4{% endif %}">
+    </video>
+  {% endif %}
+  <div class="dyn-hero__inner">
+    {% if hero.kicker %}<p class="dyn-hero__kicker">{{ hero.kicker }}</p>{% endif %}
+    <h1 class="dyn-hero__title">{{ hero_title }}</h1>
+    {% if hero.subtitle %}<p class="dyn-hero__subtitle">{{ hero.subtitle }}</p>{% endif %}
+  </div>
+</header>

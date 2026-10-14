@@ -2,33 +2,115 @@
 layout: archive
 title: "Publications"
 permalink: /publications/
+hero: true
 ---
 
 {% include base_path %}
-
-{% if site.author.googlescholar %}
-  <p class="wordwrap">For a complete list, see <a href="{{ site.author.googlescholar }}">Tijana Miseljic's Google Scholar profile</a>.</p>
-{% endif %}
-
-{% if site.publications.size == 0 %}
-  <p>The group's publications will be listed here soon.</p>
-{% elsif site.publication_category %}
-  <!-- Grouped by the `category` field of each publication -->
-  {% for category in site.publication_category %}
-    {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
-      {% if post.category != category[0] %}
-        {% continue %}
-      {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
-      {% include archive-single.html %}
-    {% endfor %}
-  {% endfor %}
+{% comment %}
+  One file per paper in _publications/ (same format as erickchica.com), listed newest first under the
+  categories in _config.yml (publication_category) and grouped by year. Each category: heading and year
+  filter across the full width, then two columns: the year groups, and the journal covers of that
+  category's papers (`cover_image:`), whose heading lines up with the first year heading.
+  Each paper is drawn by _includes/cards/publication-entry.html.
+{% endcomment %}
+{% if site.publications_page.show_samples %}
+  {% assign pubs = site.publications %}
 {% else %}
-  {% for post in site.publications reversed %}
-    {% include archive-single.html %}
-  {% endfor %}
+  {% assign pubs = site.publications | where_exp: "item", "item.sample != true" %}
 {% endif %}
+
+<div class="dyn-pubs">
+{% for category in site.publication_category %}
+  <section class="dyn-pubs__category">
+    <h2 id="{{ category.key }}" class="dyn-pubs__cat">{{ category.title }}</h2>
+    {% assign items = pubs | where: "category", category.key %}
+    {% for extra_key in category.also %}
+      {% assign extra = pubs | where: "category", extra_key %}
+      {% assign items = items | concat: extra %}
+    {% endfor %}
+    {% assign items = items | sort: "date" | reverse %}
+
+    {% if items.size > 0 %}
+      {% comment %} The years that have papers in this category, newest first {% endcomment %}
+      {% assign year_list = "" %}
+      {% for item in items %}
+        {% assign item_year = item.date | date: "%Y" %}
+        {% unless year_list contains item_year %}{% assign year_list = year_list | append: item_year | append: "," %}{% endunless %}
+      {% endfor %}
+      {% assign years = year_list | split: "," %}
+      {% comment %}
+        Covers for this section: listed papers with `cover_image:`, plus covers in _data/covers.yml
+        (papers not on the page yet; `category:` defaults to journals). Sorted newest first via "date|source|index" keys.
+      {% endcomment %}
+      {% assign paper_covers = items | where_exp: "item", "item.cover_image" %}
+      {% assign cover_keys = "" %}
+      {% for pub in paper_covers %}
+        {% assign cover_key = pub.date | date: "%Y-%m-%d" | append: "|p|" | append: forloop.index0 %}
+        {% assign cover_keys = cover_keys | append: cover_key | append: ";" %}
+      {% endfor %}
+      {% for extra_cover in site.data.covers %}
+        {% assign extra_category = extra_cover.category | default: "journals" %}
+        {% if extra_category == category.key %}
+          {% assign cover_key = extra_cover.date | date: "%Y-%m-%d" | append: "|d|" | append: forloop.index0 %}
+          {% assign cover_keys = cover_keys | append: cover_key | append: ";" %}
+        {% endif %}
+      {% endfor %}
+      {% assign cover_keys = cover_keys | split: ";" | sort | reverse %}
+
+      {% if years.size > 1 %}
+      {% comment %} Year filter: hidden until assets/js/dyn-pub-years.js makes it work {% endcomment %}
+      <div class="dyn-years" role="group" aria-label="Show {{ category.title | downcase }} from" hidden>
+        <button type="button" data-year="all" aria-pressed="true">All</button>
+        {% for year in years %}<button type="button" data-year="{{ year }}" aria-pressed="false">{{ year }}</button>{% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="dyn-pubs__cols{% if cover_keys.size > 0 %} dyn-pubs__cols--covers{% endif %}">
+        <div class="dyn-pubs__main">
+          {% for year in years %}
+          <div class="dyn-pubs__year-group" data-year="{{ year }}">
+            <h3 id="{{ category.key }}-{{ year }}" class="dyn-pubs__year">{{ year }}</h3>
+            <ol class="dyn-pubs__list">
+              {% for item in items %}
+                {% assign item_year = item.date | date: "%Y" %}
+                {% if item_year == year %}{% include cards/publication-entry.html item=item %}{% endif %}
+              {% endfor %}
+            </ol>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if cover_keys.size > 0 %}
+        <aside class="dyn-pubs__covers" aria-labelledby="{{ category.key }}-covers">
+          <h3 id="{{ category.key }}-covers" class="dyn-pubs__year">Journal covers</h3>
+          <div class="dyn-pubs__cover-list">
+          {% for cover_key in cover_keys %}
+            {% assign key_parts = cover_key | split: "|" %}
+            {% assign cover_index = key_parts[2] | plus: 0 %}
+            {% if key_parts[1] == "p" %}
+              {% assign pub = paper_covers[cover_index] %}
+              {% assign cover_image = pub.cover_image %}{% assign cover_link = pub.cover_url | default: pub.paperurl %}
+              {% assign cover_journal = pub.venue %}{% assign cover_year = pub.date | date: "%Y" %}
+            {% else %}
+              {% assign extra_cover = site.data.covers[cover_index] %}
+              {% assign cover_image = extra_cover.image %}{% assign cover_link = extra_cover.url %}
+              {% assign cover_journal = extra_cover.journal %}{% assign cover_year = extra_cover.date | date: "%Y" %}
+            {% endif %}
+            <figure class="dyn-pubs__cover">
+              {% if cover_link %}<a href="{{ cover_link }}" target="_blank" rel="noopener">{% endif %}
+                <img src="{{ cover_image | relative_url }}" alt="{{ cover_journal }} cover, {{ cover_year }}" loading="lazy">
+              {% if cover_link %}</a>{% endif %}
+            </figure>
+          {% endfor %}
+          </div>
+        </aside>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="dyn-empty">Coming soon.</p>
+    {% endif %}
+  </section>
+{% endfor %}
+</div>
+
+<script src="{{ base_path }}/assets/js/dyn-pub-years.js" defer></script>
