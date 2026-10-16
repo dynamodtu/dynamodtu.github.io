@@ -134,6 +134,54 @@ body {
     padding: 2em 1.25em 1.5em;
   }
 
+  /* Faint background pattern (sidebar_pattern in _config.yml; drawn by scripts/sidebar_patterns.py):
+     white at low opacity over the navy, filling the sidebar from just under the logo to the bottom
+     (behind the menu and icons), with a short soft edge at the top. Large screens only */
+  @include breakpoint($large) {
+    &--dots .dyn-sidebar__body::before,
+    &--waves .dyn-sidebar__body::before,
+    &--nodes .dyn-sidebar__body::before {
+      content: "";
+      position: absolute;
+      z-index: -1;          /* behind the menu, inside the menu area */
+      top: 0.75em;
+      right: -1.25em;       /* out to the sidebar's edges, past its side and bottom padding */
+      bottom: -1.5em;
+      left: -1.25em;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.025;
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 5em);
+      mask-image: linear-gradient(to bottom, transparent, #000 5em);
+      pointer-events: none;
+    }
+
+    &--dots .dyn-sidebar__body::before {
+      background-image: url("../../images/patterns/sidebar-dots.svg");
+    }
+
+    &--waves .dyn-sidebar__body::before {
+      background-image: url("../../images/patterns/sidebar-waves.svg");
+    }
+
+    /* node garden (images/patterns/sidebar-nodes.svg), drawn at the sidebar's tall shape so it never repeats.
+       Like the dots in the page banners, it is a gradient: clearest at the bottom, fading out toward the menu */
+    &--nodes .dyn-sidebar__body::before {
+      background-image: url("../../images/patterns/sidebar-nodes.svg");
+      background-position: center bottom;
+      opacity: 0.06;
+      -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 95%);
+      mask-image: linear-gradient(to top, #000 10%, transparent 95%);
+    }
+
+    /* keep the logo, menu and icons above the pattern */
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
   a {
     color: var(--dyn-sidebar-text);
 
@@ -549,13 +597,17 @@ h2[id] {
   }
 }
 
-/* Research cards on the home page: icon, title, short text, "Learn more"; the whole card is the link.
-   Three side by side on wide screens, stacked on phones */
+/* Research cards on the home page: icon, category label, title, short text, "Learn more"; the whole card
+   is the link. Two per row (a 2 x 2 grid for four areas), stacked on phones */
 .dyn-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5em;
   margin: 0 0 2.5em;
+
+  @include breakpoint($medium) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .dyn-card {
@@ -591,6 +643,16 @@ h2[id] {
       width: 100%;
       height: 100%;
     }
+  }
+
+  /* small grey category (Therapy, Drug delivery, Diagnostics), like the Members page section labels */
+  .dyn-card__label {
+    margin: 0 0 0.3em;
+    font-size: 0.72em;
+    font-weight: bold;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--global-text-color-light);
   }
 
   .dyn-card__title {
@@ -630,7 +692,7 @@ h2[id] {
   }
 }
 
-/* News list */
+/* News list (home page and News page): per post its title, date and "Read more", under thin lines */
 .dyn-news {
   margin: 0 0 1em;
   padding: 0;
@@ -638,17 +700,353 @@ h2[id] {
 
   &__item {
     display: flex;
-    gap: 1em;
-    padding: 0.6em 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35em;
+    margin: 0;
+    padding: 1em 0 1.1em;
     border-bottom: 1px solid var(--global-border-color);
   }
 
-  &__date {
-    flex: 0 0 7.5em;
-    font-size: $type-size-6;
-    font-weight: bold;
-    line-height: 1.9;
+  &__item a.dyn-news__title {
+    font-size: 0.95em;
+    line-height: 1.45;
     color: $dyn-dark;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: $dyn-primary;
+    }
+  }
+
+  &__date {
+    font-size: 0.8em;
+    color: var(--global-text-color-light);
+  }
+
+  &__item a.dyn-news__more {
+    font-size: 0.85em;
+    color: $dyn-primary;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Home page: Welcome (photo with the text around it), the News + Publications panels, the collaborators strip */
+/* the home page's big headings, all alike: navy, light with the bold part in <b> ("Latest <b>News</b>") */
+.page__content .dyn-home__heading {
+  margin: 0 0 0.8em;
+  padding: 0;
+  font-size: 2em;
+  font-weight: 300;
+  line-height: 1.2;
+  color: $dyn-primary;
+  border: 0;
+
+  b {
+    font-weight: 800;
+  }
+}
+
+.dyn-welcome {
+  display: flow-root; /* contains the floated photo, so the next section always starts below it */
+
+  /* the photo floats left and the text wraps around it */
+  &__photo {
+    float: left;
+    width: 38%;
+    margin: 0.3em 1.6em 0.8em 0;
+
+    @media (max-width: 600px) {
+      float: none;
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  &__photo--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    font-size: 0.85em;
+    color: var(--global-text-color-light);
+    background: $dyn-tint;
+    border: 1px dashed $dyn-line;
+  }
+
+  p {
+    line-height: 1.7;
+  }
+
+  .dyn-welcome__more {
+    clear: both;
+    padding-top: 0.4em;
+
+    a {
+      margin-right: 1.4em;
+      font-weight: bold;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+  }
+}
+
+/* latest news (navy panel) and recent publications (light panel, like the page banners) side by side,
+   each only as tall as its content; stacked on smaller screens */
+.dyn-duo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5em 2em;
+  align-items: start;
+  margin: 3em 0 0;
+
+  @include breakpoint($large) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    padding: 0.6em 2em 1.4em;
+    color: #fff;
+  }
+
+  &__col--news &__panel {
+    background: $dyn-primary;
+  }
+
+  .dyn-duo__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dyn-duo__item {
+    display: flex;
+    align-items: center;
+    gap: 1.2em;
+    margin: 0;
+    padding: 1.15em 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &__text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  a.dyn-duo__title {
+    display: block;
+    overflow: hidden;
+    font-size: 1em;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* news titles: one line, "..." when longer */
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+      text-decoration-color: $dyn-accent;
+    }
+  }
+
+  a.dyn-duo__title--two-lines {
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 2; /* paper titles: up to two lines */
+    -webkit-box-orient: vertical;
+  }
+
+  &__meta {
+    display: block;
+    margin-top: 0.3em;
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.6);
+
+    b,
+    strong {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  &__meta--one-line {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  a.dyn-duo__plus {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.3em;
+    height: 2.3em;
+    color: #fff;
+    text-decoration: none;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-radius: 50%;
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover,
+    &:focus {
+      color: $dyn-primary;
+      background: #fff;
+    }
+  }
+
+  a.dyn-duo__all {
+    align-self: flex-start;
+    margin-top: 0.6em;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: $dyn-accent;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  /* the publications panel: light, with dark text and the site's thin grey lines */
+  &__col--pubs {
+    .dyn-duo__panel {
+      color: $dyn-text;
+      background: $dyn-tint;
+    }
+
+    .dyn-duo__item {
+      border-bottom-color: $dyn-line;
+    }
+
+    a.dyn-duo__title {
+      color: $dyn-dark;
+
+      &:hover,
+      &:focus {
+        color: $dyn-primary;
+      }
+    }
+
+    .dyn-duo__meta {
+      color: var(--global-text-color-light);
+
+      b,
+      strong {
+        color: $dyn-dark;
+      }
+    }
+
+    a.dyn-duo__all {
+      color: $dyn-primary;
+    }
+  }
+}
+
+/* collaborators: a light grey strip with their logos (or names) in a row */
+.dyn-partners {
+  margin: 3em 0 0;
+  padding: 2.2em 2em 2.4em;
+  background: $dyn-tint;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5em 3em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    margin: 0;
+
+    img {
+      display: block;
+      width: auto;
+      max-width: 220px;
+      height: 56px;
+      object-fit: contain;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  &__name {
+    font-size: 1.15em;
+    font-weight: 700;
+    color: $dyn-dark;
+  }
+}
+
+/* A news post's own page */
+.dyn-post {
+  &__date {
+    font-size: 0.9em;
+    color: var(--global-text-color-light);
+  }
+
+  &__image {
+    display: block;
+    margin: 0 0 1.5em;
+  }
+
+  .dyn-post__back {
+    margin-top: 2.5em;
+  }
+}
+
+/* A research area's page: previous / all areas / next, under a thin line */
+.dyn-area-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1em;
+  align-items: center;
+  margin-top: 3em;
+  padding-top: 1.2em;
+  border-top: 1px solid $dyn-line;
+
+  .dyn-area-nav__link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+  }
+
+  .dyn-area-nav__link--next {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  &__dir {
+    font-size: 0.78em;
+    color: var(--global-text-color-light);
+  }
+
+  &__title {
+    font-weight: bold;
+    color: $dyn-primary;
+  }
+
+  .dyn-area-nav__all {
+    font-size: 0.85em;
+    text-decoration: none;
     white-space: nowrap;
   }
 }
@@ -687,10 +1085,16 @@ h2[id] {
     }
   }
 
+  /* first name light, surname bold (the <b> from _includes/member-name.html), as for the PI */
   .dyn-people__name {
     margin: 0;
     font-size: 1.15em;
+    font-weight: 400;
     color: $dyn-dark;
+
+    b {
+      font-weight: 800;
+    }
   }
 
   .dyn-people__sub {
@@ -699,8 +1103,21 @@ h2[id] {
     color: $dyn-primary;
   }
 
-  /* PI, in the style of jeongresearch.org/current */
+  /* small grey note under the role for Ph.D. students the PI co-supervises (`co_supervised: true`) */
+  .dyn-people__cosup {
+    margin: 0.1em 0 0;
+    font-size: 0.78em;
+    font-style: italic;
+    color: var(--global-text-color-light);
+  }
+
+  /* PI, laid out like bmm.kaist.ac.kr in the site's own plain style: photo and details, then one row per
+     list (Education, Work experience, Awards), each under a thin grey line: heading on the left, "year  text" lines */
   .dyn-pi {
+    margin-bottom: 1.5em; /* room before the next section's heading */
+  }
+
+  .dyn-pi__card {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5em 2.25em;
@@ -709,7 +1126,7 @@ h2[id] {
 
   .dyn-pi__photo {
     flex: 0 0 auto;
-    width: 240px;
+    width: 220px;
     max-width: 100%;
     height: auto;
     aspect-ratio: 4 / 5;
@@ -721,18 +1138,19 @@ h2[id] {
   }
 
   .dyn-pi__text {
-    flex: 1 1 320px;
+    flex: 1 1 300px;
+    padding-top: 0.5em;
     font-size: 0.95em;
     line-height: 1.6;
     color: $dyn-dark;
 
     p {
-      margin: 0 0 1em;
+      margin: 0;
     }
   }
 
   .dyn-pi__name {
-    margin: 0 0 0.7em;
+    margin: 0 0 0.5em;
     font-size: 1.7em;
     font-weight: 300;
     color: $dyn-dark;
@@ -742,36 +1160,75 @@ h2[id] {
     }
   }
 
-  .dyn-pi__text .dyn-pi__label {
-    margin-bottom: 0.2em;
-    font-weight: bold;
+  .dyn-pi__text .dyn-pi__role {
+    font-size: 1.05em;
+    color: var(--global-text-color-light);
+  }
+
+  .dyn-pi__text .dyn-pi__affiliation {
+    font-size: 0.85em;
+    color: var(--global-text-color-light);
+  }
+
+  /* office, phone, email: one line each with an icon, each underlined by a thin line */
+  .dyn-pi__contact {
+    margin: 1.1em 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9em;
+
+    li {
+      margin: 0 0 0.3em;
+    }
+
+    i {
+      margin-right: 0.6em;
+      color: var(--global-text-color-light);
+    }
+  }
+
+  .dyn-pi__bio {
+    margin-top: 2em;
+  }
+
+  .dyn-pi__block {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.4em 2em;
+    margin-top: 2em;
+    padding-top: 1.1em;
+    border-top: 1px solid $dyn-line;
+
+    @include breakpoint($medium) {
+      grid-template-columns: 9.5em minmax(0, 1fr);
+    }
+  }
+
+  .dyn-pi__label {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1.5;
+    color: $dyn-dark;
   }
 
   .dyn-pi__list {
-    margin: 0 0 1em;
+    margin: 0;
     padding: 0;
     list-style: none;
+    font-size: 0.92em;
 
     li {
       display: flex;
       gap: 1em;
-      margin: 0;
+      margin: 0 0 0.35em;
     }
   }
 
   .dyn-pi__year {
-    flex: 0 0 8em;
+    flex: 0 0 8em; /* fits "2023 – present" */
     white-space: nowrap;
-  }
-
-  .dyn-pi__contact > span {
-    display: block; /* one line each for Email / Office / Phone */
-  }
-
-  .dyn-pi__links a {
-    margin-right: 1.25em;
-    font-size: 0.9em;
-    white-space: nowrap;
+    color: var(--global-text-color-light);
   }
 
   /* everyone else: a grid of cards (round photo, name, role, research line, link icons), centred */
@@ -805,16 +1262,27 @@ h2[id] {
 
   .dyn-people__avatar--empty {
     @include dyn-initials(2em);
+    margin-bottom: 0.4em; /* the larger letters double "em": same gap under initials as under a photo */
+  }
+
+  /* the text fills the card, and the research line sits at its bottom, just above the icons,
+     so research lines and icons line up across cards of different heights */
+  .dyn-people__card .dyn-people__who {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: center;
   }
 
   .dyn-people__research {
-    margin: 0.3em 0 0;
+    margin: auto 0 0;
+    padding-top: 0.9em;
     font-size: 0.85em;
   }
 
   .dyn-people__icons {
-    margin: auto 0 0; /* pushed to the bottom, so icons line up across cards of different heights */
-    padding-top: 0.6em;
+    margin: 0;
+    padding-top: 0.5em;
     white-space: nowrap;
 
     a {
@@ -842,8 +1310,12 @@ h2[id] {
 
   .dyn-people__minor-name {
     display: block;
-    font-weight: 600;
+    font-weight: 400;
     color: $dyn-dark;
+
+    b {
+      font-weight: 700;
+    }
   }
 
   .dyn-people__minor-meta {

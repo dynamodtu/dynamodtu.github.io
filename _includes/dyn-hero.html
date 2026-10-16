@@ -14,6 +14,8 @@
 {% include base_path %}
 {% assign hero = page.hero %}
 {% assign hero_title = hero.title | default: page.title %}
+{% comment %} small label above the title: hero.kicker, else the page's `label` (research areas) or `kicker` (news posts) {% endcomment %}
+{% assign hero_kicker = hero.kicker | default: page.label | default: page.kicker %}
 {% assign hero_still = hero.poster | default: hero.image %}
 {% if hero_still %}
   {% if hero_still contains '://' %}{% assign hero_still_url = hero_still %}{% else %}{% assign hero_still_url = base_path | append: hero_still %}{% endif %}
@@ -27,7 +29,7 @@
     </video>
   {% endif %}
   <div class="dyn-hero__inner">
-    {% if hero.kicker %}<p class="dyn-hero__kicker">{{ hero.kicker }}</p>{% endif %}
+    {% if hero_kicker %}<p class="dyn-hero__kicker">{{ hero_kicker }}</p>{% endif %}
     <h1 class="dyn-hero__title">{{ hero_title }}</h1>
     {% if hero.subtitle %}<p class="dyn-hero__subtitle">{{ hero.subtitle }}</p>{% endif %}
   </div>

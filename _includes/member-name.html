@@ -1,0 +1,19 @@
+{%- comment -%}
+  A person's name with the surname in bold: "Tijana <b>Miseljic</b>".
+  The surname is the last word of the name, unless `last` is given (for two-part surnames,
+  e.g. "Villarejo Carrascosa"); in member files and in _members/students.md that is `last_name:`.
+  Params: name (full name), last (optional surname)
+{%- endcomment -%}
+{%- assign name_full = include.name | strip -%}
+{%- if include.last -%}
+  {%- assign name_last = include.last | strip -%}
+  {%- assign name_given = name_full | replace: name_last, "" | strip -%}
+{%- else -%}
+  {%- assign name_words = name_full | split: " " -%}
+  {%- assign name_last = name_words.last -%}
+  {%- assign name_given_count = name_words.size | minus: 1 -%}
+  {%- assign name_given = "" -%}
+  {%- for word in name_words limit: name_given_count -%}{%- assign name_given = name_given | append: word | append: " " -%}{%- endfor -%}
+  {%- assign name_given = name_given | strip -%}
+{%- endif -%}
+{%- if name_given != "" -%}{{ name_given }} {% endif -%}<b>{{ name_last }}</b>

@@ -6,14 +6,21 @@ hero: true
 
 {% include base_path %}
 {% comment %}
-  Directory layout. One file per person in _members/. Sections and their order come from
-  member_sections in _config.yml; each person's `section:` says where they go and `order:` sorts them.
-  The section with `layout: profile` shows each person large, with their details lists.
+  Directory layout. Sections and their order come from member_sections in _config.yml.
+  PI, postdocs, Ph.D. students, alumni: one file per person in _members/; `section:` says where they go
+  and `order:` sorts them. The section with `layout: profile` shows each person large, with their details lists.
+  Sections with `layout: list` (M.S., B.S., special course): names from _members/students.md, in that file's order.
 {% endcomment %}
 <div class="dyn-people">
 {% for section in site.member_sections %}
   <h2 id="{{ section.id }}" class="dyn-people__heading"><span>{{ section.title }}</span></h2>
-  {% assign people = site.members | where: "section", section.id | sort: "order", "last" %}
+  {% if section.layout == 'list' %}
+    {% assign student_file = site.members | where: "student_lists", true | first %}
+    {% assign people = student_file[section.id] %}
+    {% unless people %}{% assign people = "" | split: "" %}{% endunless %}
+  {% else %}
+    {% assign people = site.members | where: "section", section.id | sort: "order", "last" %}
+  {% endif %}
   {% if people.size == 0 %}
     {% if section.empty %}
     <p class="dyn-empty">{{ section.empty }}</p>
@@ -21,57 +28,45 @@ hero: true
     <p class="dyn-empty">None at the moment. Interested in joining? See <a href="{{ base_path }}/contact/">Contact</a>.</p>
     {% endif %}
   {% elsif section.layout == 'profile' %}
-    {% comment %} PI, in the style of jeongresearch.org/current: photo; name (surname bold); titles; degrees; lists; email and office {% endcomment %}
+    {% comment %} PI, laid out like bmm.kaist.ac.kr: photo and details, then Education / Work experience / Awards rows {% endcomment %}
     {% for p in people %}
-    {% assign name_parts = p.name | split: " " %}
-    {% if p.last_name %}
-      {% assign surname = p.last_name %}{% assign given = p.name | replace: p.last_name, "" | strip %}
-    {% else %}
-      {% assign surname = name_parts.last %}{% assign given_count = name_parts.size | minus: 1 %}{% assign given = "" %}
-      {% for part in name_parts limit: given_count %}{% assign given = given | append: part | append: " " %}{% endfor %}
-      {% assign given = given | strip %}
-    {% endif %}
     <article class="dyn-pi">
-      {% include member-photo.html person=p class="dyn-pi__photo" %}
-      <div class="dyn-pi__text">
-        <h3 class="dyn-pi__name">{{ given }} <b>{{ surname }}</b></h3>
-        <p class="dyn-pi__titles">
-          {% if p.role %}{{ p.role }}{% endif %}
-          {% if p.affiliation.first %}{% for line in p.affiliation %}<br>{{ line }}{% endfor %}{% elsif p.affiliation %}<br>{{ p.affiliation }}{% endif %}
-        </p>
-        {% if p.degrees %}
-        <p class="dyn-pi__degrees">{% for line in p.degrees %}{{ line }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p>
-        {% endif %}
-        {% assign bio = p.content | strip %}{% if bio != "" %}<div class="dyn-pi__bio">{{ p.content | markdownify }}</div>{% endif %}
-        {% for block in p.details %}{% if block.items and block.items.size > 0 %}
-        <p class="dyn-pi__label">{{ block.title }}:</p>
-        <ul class="dyn-pi__list">{% for item in block.items %}<li><span class="dyn-pi__year">{{ item.year }}</span><span>{{ item.text }}</span></li>{% endfor %}</ul>
-        {% endif %}{% endfor %}
-        {% if p.email or p.office or p.phone %}
-        <p class="dyn-pi__contact">
-          {% if p.email %}<span><b>Email:</b> {% include email-link.html address=p.email label="Email" show=true %}</span>{% endif %}
-          {% if p.office %}<span><b>Office:</b> {{ p.office }}</span>{% endif %}
-          {% if p.phone %}<span><b>Phone:</b> {{ p.phone }}</span>{% endif %}
-        </p>
-        {% endif %}
-        {% if p.scholar or p.orcid or p.linkedin or p.website %}
-        <p class="dyn-pi__links">
-          {% if p.scholar %}<a href="{{ p.scholar }}" target="_blank" rel="noopener"><i class="ai ai-google-scholar" aria-hidden="true"></i> Google Scholar</a>{% endif %}
-          {% if p.orcid %}<a href="{{ p.orcid }}" target="_blank" rel="noopener"><i class="ai ai-orcid" aria-hidden="true"></i> ORCID</a>{% endif %}
-          {% if p.linkedin %}<a href="{{ p.linkedin }}" target="_blank" rel="noopener"><i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn</a>{% endif %}
-          {% if p.website %}<a href="{{ p.website }}" target="_blank" rel="noopener"><i class="fas fa-link" aria-hidden="true"></i> Website</a>{% endif %}
-        </p>
-        {% endif %}
+      {% comment %} Photo, name, role and affiliation, office and phone {% endcomment %}
+      <div class="dyn-pi__card">
+        {% include member-photo.html person=p class="dyn-pi__photo" %}
+        <div class="dyn-pi__text">
+          <h3 class="dyn-pi__name">{% include member-name.html name=p.name last=p.last_name %}</h3>
+          {% if p.role %}<p class="dyn-pi__role">{{ p.role }}</p>{% endif %}
+          {% if p.affiliation %}<p class="dyn-pi__affiliation">{% if p.affiliation.first %}{% for line in p.affiliation %}{{ line }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}{% else %}{{ p.affiliation }}{% endif %}</p>{% endif %}
+          {% comment %} Office and phone only: her email, Google Scholar, ORCID and LinkedIn are the icons in the sidebar {% endcomment %}
+          {% if p.office or p.phone %}
+          <ul class="dyn-pi__contact">
+            {% if p.office %}<li><i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i><span>{{ p.office }}</span></li>{% endif %}
+            {% if p.phone %}<li><i class="fas fa-fw fa-phone" aria-hidden="true"></i><span>{{ p.phone }}</span></li>{% endif %}
+          </ul>
+          {% endif %}
+        </div>
       </div>
+      {% assign bio = p.content | strip %}{% if bio != "" %}<div class="dyn-pi__bio">{{ p.content | markdownify }}</div>{% endif %}
+      {% comment %} Education, Work experience, Awards...: heading on the left, "year  text" lines on the right {% endcomment %}
+      {% for block in p.details %}{% if block.items and block.items.size > 0 %}
+      <section class="dyn-pi__block">
+        <h4 class="dyn-pi__label">{{ block.title }}</h4>
+        <ul class="dyn-pi__list">{% for item in block.items %}<li><span class="dyn-pi__year">{{ item.year }}</span><span>{{ item.text }}</span></li>{% endfor %}</ul>
+      </section>
+      {% endif %}{% endfor %}
     </article>
     {% endfor %}
   {% elsif section.layout == 'list' %}
-    {% comment %} Low-key list for short-term students: no photos, small text, several columns {% endcomment %}
+    {% comment %} Low-key list for short-term students: no photos, small text, several columns.
+      Each entry is a plain name, or a name with an optional topic and url {% endcomment %}
     <ul class="dyn-people__minor">
-      {% for p in people %}
+      {% for s in people %}
+      {% if s.name %}{% assign student_name = s.name %}{% assign student_last = s.last_name %}{% else %}{% assign student_name = s %}{% assign student_last = nil %}{% endif %}
+      {% capture student_name %}{% include member-name.html name=student_name last=student_last %}{% endcapture %}
       <li>
-        <span class="dyn-people__minor-name">{% if p.website %}<a href="{{ p.website }}" target="_blank" rel="noopener">{{ p.name }}</a>{% elsif p.linkedin %}<a href="{{ p.linkedin }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</span>
-        {% if p.role or p.research %}<span class="dyn-people__minor-meta">{{ p.role }}{% if p.role and p.research %} · {% endif %}{{ p.research }}</span>{% endif %}
+        <span class="dyn-people__minor-name">{% if s.url %}<a href="{{ s.url }}" target="_blank" rel="noopener">{{ student_name }}</a>{% else %}{{ student_name }}{% endif %}</span>
+        {% if s.topic %}<span class="dyn-people__minor-meta">{{ s.topic }}</span>{% endif %}
       </li>
       {% endfor %}
     </ul>
@@ -81,8 +76,9 @@ hero: true
       <li class="dyn-people__card">
         {% include member-photo.html person=p class="dyn-people__avatar" %}
         <div class="dyn-people__who">
-          <h3 class="dyn-people__name">{{ p.name }}</h3>
+          <h3 class="dyn-people__name">{% include member-name.html name=p.name last=p.last_name %}</h3>
           {% if p.role %}<p class="dyn-people__sub">{{ p.role }}</p>{% endif %}
+          {% if p.co_supervised %}<p class="dyn-people__cosup">Co-supervised{% if p.main_supervisor %} with<br>{{ p.main_supervisor }}{% endif %}</p>{% endif %}
           {% if p.research %}<p class="dyn-people__research">{{ p.research }}</p>{% endif %}
         </div>
         {% include member-links.html person=p class="dyn-people__icons" %}

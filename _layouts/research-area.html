@@ -1,0 +1,32 @@
+---
+layout: default
+---
+{% comment %}
+  One research area (a file in _research/): the banner shows its label and title, then its text,
+  then links to the previous and next area (in their `order`) and back to the overview.
+{% endcomment %}
+{% include base_path %}
+{% assign areas = site.research | sort: "order" %}
+{% for area in areas %}{% if area.url == page.url %}{% assign here = forloop.index0 %}{% endif %}{% endfor %}
+{% assign prev_index = here | minus: 1 %}
+{% assign next_index = here | plus: 1 %}
+
+<div id="main" role="main">
+  <article class="page">
+    <div class="page__inner-wrap">
+      <section class="page__content">
+        {{ content }}
+
+        <nav class="dyn-area-nav" aria-label="Research areas">
+          {% if prev_index >= 0 %}{% assign prev = areas[prev_index] %}
+          <a class="dyn-area-nav__link" href="{{ base_path }}{{ prev.url }}"><span class="dyn-area-nav__dir">&larr; Previous</span><span class="dyn-area-nav__title">{{ prev.title }}</span></a>
+          {% else %}<span></span>{% endif %}
+          <a class="dyn-area-nav__all" href="{{ base_path }}/research/">All research areas</a>
+          {% if next_index < areas.size %}{% assign next = areas[next_index] %}
+          <a class="dyn-area-nav__link dyn-area-nav__link--next" href="{{ base_path }}{{ next.url }}"><span class="dyn-area-nav__dir">Next &rarr;</span><span class="dyn-area-nav__title">{{ next.title }}</span></a>
+          {% else %}<span></span>{% endif %}
+        </nav>
+      </section>
+    </div>
+  </article>
+</div>

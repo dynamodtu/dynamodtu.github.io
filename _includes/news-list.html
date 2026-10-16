@@ -1,14 +1,17 @@
 {% comment %}
-  News items from _data/news.yml, newest first.
+  News posts from _news/, newest first: title, date and a "Read more" link to the post's own page.
   Usage: {% include news-list.html %} or {% include news-list.html limit=3 %}
 {% endcomment %}
+{% include base_path %}
 {% assign news_limit = include.limit | default: 1000 %}
-{% if site.data.news and site.data.news.size > 0 %}
+{% assign posts = site.news | sort: "date" | reverse %}
+{% if posts.size > 0 %}
 <ul class="dyn-news">
-  {% for item in site.data.news limit: news_limit %}
+  {% for post in posts limit: news_limit %}
   <li class="dyn-news__item">
-    <time class="dyn-news__date" datetime="{{ item.date | date: '%Y-%m-%d' }}">{{ item.date | date: "%-d %b %Y" }}</time>
-    <span class="dyn-news__text">{{ item.text | markdownify | remove: '<p>' | remove: '</p>' | strip }}</span>
+    <a class="dyn-news__title" href="{{ base_path }}{{ post.url }}">{{ post.title }}</a>
+    <time class="dyn-news__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%B %-d, %Y" }}</time>
+    <a class="dyn-news__more" href="{{ base_path }}{{ post.url }}" aria-label="Read more: {{ post.title | escape }}">Read more &rarr;</a>
   </li>
   {% endfor %}
 </ul>

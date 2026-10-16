@@ -1,0 +1,17 @@
+{%- comment -%}
+  The research cards: one per file in _research/, in their `order`. Each card shows the area's icon, label,
+  title and `summary`, and links to the area's own page.
+{%- endcomment -%}
+{% include base_path %}
+{% assign areas = site.research | sort: "order" %}
+<div class="dyn-cards">
+  {% for area in areas %}
+  <a class="dyn-card" href="{{ base_path }}{{ area.url }}">
+    <span class="dyn-card__icon" aria-hidden="true">{% include research-icon.html icon=area.icon %}</span>
+    {% if area.label %}<p class="dyn-card__label">{{ area.label }}</p>{% endif %}
+    <h3 class="dyn-card__title">{{ area.title }}</h3>
+    <p class="dyn-card__text">{{ area.summary }}</p>
+    <span class="dyn-card__more">Learn more &rarr;</span>
+  </a>
+  {% endfor %}
+</div>
