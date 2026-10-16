@@ -1,0 +1,28 @@
+# Talks, posters and other conference contributions, shown on the Conferences page grouped by year
+# (any order here; the page sorts them newest first). Leave out any field you don't need.
+#
+# - date: 2026-06-15                  # day of the presentation (only the year is shown)
+#   type: Talk                        # Talk | Poster | Invited talk | Keynote | Workshop ... (shown as a label)
+#   title: "Title of the contribution"
+#   presenters: "**T. Maric**, E. Chica"   # Markdown: **bold** for group members
+#   event: "Name of the conference 2026"
+#   location: "Copenhagen, Denmark"
+#   url: https://example.org          # link for the title (abstract, programme, slides...)
+#   pdf: /files/posters/file.pdf      # optional poster or slides on this site
+#   sample: true                      # TEMPORARY placeholder, shown with a "sample" tag: delete these entries
+
+- date: 2026-06-15
+  type: Talk
+  title: "Example talk title"
+  presenters: "**T. Maric**"
+  event: "Example Conference 2026"
+  location: "City, Country"
+  sample: true
+
+- date: 2025-09-10
+  type: Poster
+  title: "Example poster title"
+  presenters: "**E. Chica**, **T. Maric**"
+  event: "Example Symposium 2025"
+  location: "City, Country"
+  sample: true

@@ -14,20 +14,24 @@ main:
         url: /research/#metal-based-microrobots
       - title: "Polymer-based microrobots"
         url: /research/#polymer-based-microrobots
+      - title: "Nature-based microrobots"
+        url: /research/#nature-based-microrobots
 
   - title: "Publications"
     url: /publications/
     children:
       - title: "Journal articles"
-        url: /publications/#journals
-      - title: "Conference papers"
-        url: /publications/#conferences
+        url: /publications/
+      - title: "Conferences"
+        url: /conferences/
 
   - title: "Members"
     url: /members/
     children:
-      - title: "Professor"
-        url: /members/#professor
+      - title: "Principal Investigator"
+        url: /members/#pi
+      - title: "Postdocs"
+        url: /members/#postdocs
       - title: "Ph.D. Students"
         url: /members/#phd-students
       - title: "M.S. & B.S. Students"
@@ -35,8 +39,8 @@ main:
       - title: "Alumni"
         url: /members/#alumni
 
-  - title: "News & Resources"
+  - title: "News"
     url: /news/
 
-  - title: "Contact & Join Us"
+  - title: "Contact"
     url: /contact/

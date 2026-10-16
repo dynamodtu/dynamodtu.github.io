@@ -15,7 +15,7 @@ authors:
   - key: anja
 collection: publications
 category: journals
-date: 2026-03-01
+date: 2025-09-13
 venue: "Biomaterials"
 short: "Biomaterials"
 volume: '326'

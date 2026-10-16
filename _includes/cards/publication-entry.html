@@ -1,12 +1,14 @@
 {% comment %}
   One paper on the Publications page, in the style of jeongresearch.org/publications:
   figure on the left (when the paper has `thumbnail:`; cropped to a 4:3 frame, `thumbnail_position:` e.g. top
-  picks the part that stays visible), then the title as a link, the authors,
+  picks the part that stays visible; none at all when publications_page.show_thumbnails is false in _config.yml),
+  then the title as a link, the authors,
   and "Journal volume(issue), pages (year)." Reads the same fields as erickchica.com's paper files.
   Param: item (publication document)
 {% endcomment %}
 {% assign pub = include.item %}
 {% assign thumb = pub.thumbnail | default: "" %}
+{% if site.publications_page.show_thumbnails == false %}{% assign thumb = "" %}{% endif %}
 {% assign author_format = pub.author_format | default: site.publications_page.author_format | default: site.author_name_format %}
 {% capture authors %}{% include components/author-list.html item=pub format=author_format %}{% endcapture %}
 {% capture citation %}{% include components/pub-volume.html item=pub %}{% endcapture %}

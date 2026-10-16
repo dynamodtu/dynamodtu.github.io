@@ -12,7 +12,7 @@
   <div class="dyn-footer__logos">
     {% for logo in footer.logos %}
       {% if logo.url %}<a class="dyn-footer__logo" href="{{ logo.url }}" target="_blank" rel="noopener" aria-label="{{ logo.name }}">{% else %}<span class="dyn-footer__logo">{% endif %}
-        <img src="{{ base_path }}{{ logo.file }}" alt="{{ logo.name }} logo">
+        <img src="{{ base_path }}{{ logo.file }}" alt="{{ logo.name }} logo"{% if logo.width and logo.height %} width="{{ logo.width }}" height="{{ logo.height }}"{% endif %}>
       {% if logo.url %}</a>{% else %}</span>{% endif %}
     {% endfor %}
   </div>

@@ -18,10 +18,10 @@ hero: true
     {% if section.empty %}
     <p class="dyn-empty">{{ section.empty }}</p>
     {% else %}
-    <p class="dyn-empty">None at the moment. Interested in joining? See <a href="{{ base_path }}/contact/">Contact &amp; Join Us</a>.</p>
+    <p class="dyn-empty">None at the moment. Interested in joining? See <a href="{{ base_path }}/contact/">Contact</a>.</p>
     {% endif %}
   {% elsif section.layout == 'profile' %}
-    {% comment %} Professor, in the style of jeongresearch.org/current: photo; name (surname bold); titles; degrees; lists; email and office {% endcomment %}
+    {% comment %} PI, in the style of jeongresearch.org/current: photo; name (surname bold); titles; degrees; lists; email and office {% endcomment %}
     {% for p in people %}
     {% assign name_parts = p.name | split: " " %}
     {% if p.last_name %}
@@ -65,10 +65,20 @@ hero: true
       </div>
     </article>
     {% endfor %}
+  {% elsif section.layout == 'list' %}
+    {% comment %} Low-key list for short-term students: no photos, small text, several columns {% endcomment %}
+    <ul class="dyn-people__minor">
+      {% for p in people %}
+      <li>
+        <span class="dyn-people__minor-name">{% if p.website %}<a href="{{ p.website }}" target="_blank" rel="noopener">{{ p.name }}</a>{% elsif p.linkedin %}<a href="{{ p.linkedin }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</span>
+        {% if p.role or p.research %}<span class="dyn-people__minor-meta">{{ p.role }}{% if p.role and p.research %} · {% endif %}{{ p.research }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
   {% else %}
     <ul class="dyn-people__list">
       {% for p in people %}
-      <li class="dyn-people__row">
+      <li class="dyn-people__card">
         {% include member-photo.html person=p class="dyn-people__avatar" %}
         <div class="dyn-people__who">
           <h3 class="dyn-people__name">{{ p.name }}</h3>

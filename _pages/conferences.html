@@ -1,0 +1,64 @@
+---
+title: "Conferences"
+permalink: /conferences/
+hero: true
+---
+
+{% include base_path %}
+{% comment %}
+  Talks, posters and other conference contributions from _data/conferences.yml, newest first, grouped by
+  year with the same year filter and look as the Publications page (_sass/_dyn-publications.scss).
+{% endcomment %}
+{% assign talks = site.data.conferences | sort: "date" | reverse %}
+
+<div class="dyn-pubs">
+  <section class="dyn-pubs__category">
+  {% if talks.size > 0 %}
+    {% assign year_list = "" %}
+    {% for talk in talks %}
+      {% assign talk_year = talk.date | date: "%Y" %}
+      {% unless year_list contains talk_year %}{% assign year_list = year_list | append: talk_year | append: "," %}{% endunless %}
+    {% endfor %}
+    {% assign years = year_list | split: "," %}
+
+    {% if years.size > 1 %}
+    {% comment %} Year filter: hidden until assets/js/dyn-pub-years.js makes it work {% endcomment %}
+    <div class="dyn-years" role="group" aria-label="Show conference contributions from" hidden>
+      <button type="button" data-year="all" aria-pressed="true">All</button>
+      {% for year in years %}<button type="button" data-year="{{ year }}" aria-pressed="false">{{ year }}</button>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% for year in years %}
+    <div class="dyn-pubs__year-group" data-year="{{ year }}">
+      <h2 id="{{ year }}" class="dyn-pubs__year">{{ year }}</h2>
+      <ol class="dyn-pubs__list">
+        {% for talk in talks %}
+          {% assign talk_year = talk.date | date: "%Y" %}
+          {% if talk_year == year %}
+          <li class="dyn-pub dyn-pub--text">
+            <div class="dyn-pub__body">
+              <p class="dyn-pub__title">
+                {% if talk.type %}<span class="dyn-talk__type">{{ talk.type }}</span>{% endif %}
+                {% if talk.url %}<a href="{{ talk.url }}" target="_blank" rel="noopener">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
+                {% if talk.sample %}<span class="dyn-pub__sample">sample</span>{% endif %}
+              </p>
+              {% if talk.presenters %}<p class="dyn-pub__authors">{{ talk.presenters | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
+              <p class="dyn-pub__venue">
+                <b><i>{{ talk.event }}</i></b>{% if talk.location %}, {{ talk.location }}{% endif %}.
+                {% if talk.pdf %}<a class="dyn-pub__pdf" href="{{ talk.pdf | relative_url }}" target="_blank" rel="noopener"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</a>{% endif %}
+              </p>
+            </div>
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ol>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="dyn-empty">Coming soon.</p>
+  {% endif %}
+  </section>
+</div>
+
+<script src="{{ base_path }}/assets/js/dyn-pub-years.js" defer></script>
