@@ -10,20 +10,42 @@
     poster: /images/hero/file-name.jpg         (optional still shown while the video loads; defaults to `image`)
 
   With a video, `poster` (or `image`) is also what visitors see if their device is set to reduce motion.
+
+  A page under a main section without a video or photo of its own uses the section's (its video, poster and
+  image; the title stays its own). Its section is the menu item whose sub-menu links to it (_data/navigation.yml,
+  e.g. Conferences under Publications), else the page at the first part of its address (/news/<post>/ -> /news/).
 {% endcomment %}
 {% include base_path %}
 {% assign hero = page.hero %}
+{% assign hero_media = hero %}
+{% unless hero.video or hero.image %}
+  {% assign parent_url = nil %}
+  {% for item in site.data.navigation.main %}
+    {% for child in item.children %}
+      {% assign child_path = child.url | split: "#" | first %}
+      {% if child_path == page.url and item.url != page.url %}{% assign parent_url = item.url %}{% endif %}
+    {% endfor %}
+  {% endfor %}
+  {% unless parent_url %}
+    {% assign url_parts = page.url | split: "/" %}
+    {% if url_parts.size > 2 %}{% assign parent_url = "/" | append: url_parts[1] | append: "/" %}{% endif %}
+  {% endunless %}
+  {% if parent_url %}
+    {% assign parent_page = site.pages | where: "url", parent_url | first %}
+    {% if parent_page.hero.video or parent_page.hero.image %}{% assign hero_media = parent_page.hero %}{% endif %}
+  {% endif %}
+{% endunless %}
 {% assign hero_title = hero.title | default: page.title %}
 {% comment %} small label above the title: hero.kicker, else the page's `label` (research areas) or `kicker` (news posts) {% endcomment %}
 {% assign hero_kicker = hero.kicker | default: page.label | default: page.kicker %}
-{% assign hero_still = hero.poster | default: hero.image %}
+{% assign hero_still = hero_media.poster | default: hero_media.image %}
 {% if hero_still %}
   {% if hero_still contains '://' %}{% assign hero_still_url = hero_still %}{% else %}{% assign hero_still_url = base_path | append: hero_still %}{% endif %}
 {% endif %}
-<header class="dyn-hero{% if hero_still or hero.video %} dyn-hero--image{% endif %}"{% if hero_still %} style="background-image: url('{{ hero_still_url }}');"{% endif %}>
-  {% if hero.video %}
-    {% if hero.video contains '://' %}{% assign hero_video_url = hero.video %}{% else %}{% assign hero_video_url = base_path | append: hero.video %}{% endif %}
-    {% assign hero_video_ext = hero.video | split: '.' | last | downcase %}
+<header class="dyn-hero{% if hero_still or hero_media.video %} dyn-hero--image{% endif %}"{% if hero_still %} style="background-image: url('{{ hero_still_url }}');"{% endif %}>
+  {% if hero_media.video %}
+    {% if hero_media.video contains '://' %}{% assign hero_video_url = hero_media.video %}{% else %}{% assign hero_video_url = base_path | append: hero_media.video %}{% endif %}
+    {% assign hero_video_ext = hero_media.video | split: '.' | last | downcase %}
     <video class="dyn-hero__video" autoplay muted loop playsinline preload="auto" aria-hidden="true"{% if hero_still %} poster="{{ hero_still_url }}"{% endif %}>
       <source src="{{ hero_video_url }}" type="video/{% if hero_video_ext == 'webm' %}webm{% else %}mp4{% endif %}">
     </video>

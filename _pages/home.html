@@ -3,6 +3,8 @@ permalink: /
 hero:
   kicker: "Technical University of Denmark (DTU)"
   title: "DYNAMO"
+  video: /files/videos/home.mp4
+  poster: /images/hero/home.jpg
 welcome_photo:            # e.g. /images/home/welcome.jpg (landscape); until then a grey placeholder is shown
 welcome_photo_alt: ""     # short description of the photo
 redirect_from:
@@ -10,32 +12,38 @@ redirect_from:
   - /about.html
 ---
 {% comment %}
-  Landing page: Welcome (photo with the mission text around it), then the latest news (posts in _news/) and
+  Landing page: Welcome (photo beside the mission text and buttons), then the latest news (posts in _news/) and
   publications side by side, then the collaborators' logos (_data/collaborators.yml). Research cards: /research/.
 {% endcomment %}
 {% include base_path %}
 
 <section class="dyn-welcome">
   <h2 class="dyn-home__heading"><b>Welcome</b></h2>
-  {% if page.welcome_photo %}
-  <img class="dyn-welcome__photo" src="{{ page.welcome_photo | relative_url }}" alt="{{ page.welcome_photo_alt }}">
-  {% else %}
-  <div class="dyn-welcome__photo dyn-welcome__photo--empty" aria-hidden="true">Photo coming soon</div>
-  {% endif %}
-  <!-- TODO: check this mission text; it is a first draft. -->
-  <p>DYNAMO, the Dynamic Biomedical Devices Group at the Technical University of Denmark, is led by
-  Tijana Miseljic. Our mission is to turn micro- and nanomotors, tiny devices that propel themselves
-  with light or chemical fuel, into active tools for medicine. We design them to carry drugs past the
-  body's barriers, into chronic wounds, across the nasal route to the brain and through the mucus of
-  the gut, and to detect drugs and biomarkers on the move with SERS. Our work brings together
-  materials science, chemistry, microfabrication and biomedical engineering, with the aim of
-  translating active micro/nanodevices into real biomedical solutions.</p>
-  <p class="dyn-welcome__more"><a href="{{ base_path }}/research/">Our research &rarr;</a>
-  <a href="{{ base_path }}/members/">Meet the team &rarr;</a>
-  <a href="{{ base_path }}/contact/">Join us &rarr;</a></p>
+  <div class="dyn-welcome__body">
+    <div class="dyn-welcome__media">
+      {% if page.welcome_photo %}
+      <img class="dyn-welcome__photo" src="{{ page.welcome_photo | relative_url }}" alt="{{ page.welcome_photo_alt }}">
+      {% else %}
+      <div class="dyn-welcome__photo dyn-welcome__photo--empty" aria-hidden="true">Photo coming soon</div>
+      {% endif %}
+    </div>
+    <div class="dyn-welcome__text">
+      <!-- TODO: check this mission text; it is a first draft. -->
+      <p>DYNAMO, the Dynamic Biomedical Devices Group at the Technical University of Denmark, is led by
+      Tijana Miseljic. Our mission is to turn micro- and nanomotors, tiny devices that propel themselves
+      with light or chemical fuel, into active tools for medicine. We design them to carry drugs past the
+      body's barriers, into chronic wounds, across the nasal route to the brain and through the mucus of
+      the gut, and to detect drugs and biomarkers on the move with SERS. Our work brings together
+      materials science, chemistry, microfabrication and biomedical engineering, with the aim of
+      translating active micro/nanodevices into real biomedical solutions.</p>
+      <p class="dyn-welcome__more dyn-actions"><a class="dyn-btn" href="{{ base_path }}/research/">Our research</a>
+      <a class="dyn-btn-outline" href="{{ base_path }}/members/">Meet the team</a>
+      <a class="dyn-btn-outline" href="{{ base_path }}/contact/">Join us</a></p>
+    </div>
+  </div>
 </section>
 
-{% comment %} Latest news and publications side by side: a navy panel and a light one {% endcomment %}
+{% comment %} Latest news and publications side by side, in two light panels {% endcomment %}
 {% assign posts = site.news | sort: "date" | reverse %}
 {% assign papers = site.publications | where_exp: "item", "item.sample != true" | sort: "date" | reverse %}
 <div class="dyn-duo">
@@ -77,15 +85,21 @@ redirect_from:
   </section>
 </div>
 
+{% comment %}
+  Collaborators: their logos in centred rows, as they are (no links). With the logo's `width`/`height`,
+  the stylesheet gives every logo about the same area, so wide and tall ones look equally big.
+{% endcomment %}
 {% if site.data.collaborators and site.data.collaborators.size > 0 %}
 <section class="dyn-partners">
   <h2 class="dyn-home__heading">Our <b>Collaborators</b></h2>
   <ul class="dyn-partners__list">
     {% for partner in site.data.collaborators %}
     <li class="dyn-partners__item">
-      {% if partner.url %}<a href="{{ partner.url }}" target="_blank" rel="noopener" title="{{ partner.name }}">{% endif %}
-      {% if partner.logo %}<img src="{{ partner.logo | relative_url }}" alt="{{ partner.name }}">{% else %}<span class="dyn-partners__name">{{ partner.name }}</span>{% endif %}
-      {% if partner.url %}</a>{% endif %}
+      {% if partner.logo %}
+      <img src="{{ partner.logo | relative_url }}" alt="{{ partner.name }}"{% if partner.width and partner.height %} class="dyn-partners__logo--sized" width="{{ partner.width }}" height="{{ partner.height }}" style="--logo-w: {{ partner.width }}; --logo-h: {{ partner.height }}"{% endif %}>
+      {% else %}
+      <span class="dyn-partners__name">{{ partner.name }}</span>
+      {% endif %}
     </li>
     {% endfor %}
   </ul>
