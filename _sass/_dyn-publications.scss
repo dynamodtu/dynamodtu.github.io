@@ -196,6 +196,21 @@
     }
   }
 
+  /* Conferences page: kind of contribution (Talk, Poster...) before the title */
+  .dyn-talk__type {
+    margin-right: 0.5em;
+    padding: 0.05em 0.55em;
+    font-size: 0.75em;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    vertical-align: 0.1em;
+    white-space: nowrap;
+    color: $dyn-primary;
+    border: 1px solid $dyn-primary;
+    border-radius: 3px;
+  }
+
   /* TEMPORARY tag on sample papers (publications_page.show_samples in _config.yml) */
   .dyn-pub__sample {
     margin-left: 0.4em;

@@ -19,6 +19,28 @@ redirect_from:
   <a class="dyn-btn-outline" href="{{ base_path }}/contact/">Join us</a>
 </p>
 
+{% comment %} Research cards: texts in _data/research_areas.yml; each card links to its section on the Research page {% endcomment %}
+<h2>Research</h2>
+<div class="dyn-cards">
+  {% for area in site.data.research_areas %}
+  <a class="dyn-card" href="{{ base_path }}/research/#{{ area.id }}">
+    <span class="dyn-card__icon" aria-hidden="true">
+      {% case area.icon %}
+      {% when 'metal' %}
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M24 9a15 15 0 0 1 0 30z" fill="currentColor"/><path d="M5 18h7M3 24h8M5 30h7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      {% when 'polymer' %}
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"><path d="M10 14l7-4 7 4v8l-7 4-7-4z"/><path d="M24 22l7-4 7 4v8l-7 4-7-4z"/><path d="M10 30l7-4 7 4v8l-7 4-7-4z"/></svg>
+      {% else %}
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="10" fill="none" stroke="currentColor" stroke-width="2.5"/><g fill="currentColor"><circle cx="24" cy="8" r="3"/><circle cx="24" cy="40" r="3"/><circle cx="8" cy="24" r="3"/><circle cx="40" cy="24" r="3"/><circle cx="12.7" cy="12.7" r="3"/><circle cx="35.3" cy="35.3" r="3"/><circle cx="35.3" cy="12.7" r="3"/><circle cx="12.7" cy="35.3" r="3"/></g></svg>
+      {% endcase %}
+    </span>
+    <h3 class="dyn-card__title">{{ area.title }}</h3>
+    <p class="dyn-card__text">{{ area.text }}</p>
+    <span class="dyn-card__more">Learn more &rarr;</span>
+  </a>
+  {% endfor %}
+</div>
+
 <h2>Latest news</h2>
 {% include news-list.html limit=3 %}
-<p><a href="{{ base_path }}/news/">All news &amp; resources &rarr;</a></p>
+<p><a href="{{ base_path }}/news/">All news &rarr;</a></p>

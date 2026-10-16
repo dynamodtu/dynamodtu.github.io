@@ -1,6 +1,6 @@
 ---
 name: Tijana Miseljic
-section: professor          # professor | phd-students | masters-bachelors | alumni (see member_sections in _config.yml)
+section: pi                 # pi | postdocs | phd-students | masters-bachelors | alumni (see member_sections in _config.yml)
 order: 1                    # position within the section (lower comes first)
 role: Assistant Professor
 affiliation:                # lines under the role

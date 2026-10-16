@@ -8,7 +8,7 @@
     <a class="dyn-sidebar__brand" href="{{ base_path }}/">
       {% if site.logo %}
         {% comment %} The logo already includes the group name, so no separate tagline {% endcomment %}
-        <img class="dyn-sidebar__logo" src="{% if site.logo contains '://' %}{{ site.logo }}{% else %}{{ base_path }}{{ site.logo }}{% endif %}" alt="{{ site.title }}: {{ site.tagline }}">
+        <img class="dyn-sidebar__logo" width="270" height="141" src="{% if site.logo contains '://' %}{{ site.logo }}{% else %}{{ base_path }}{{ site.logo }}{% endif %}" alt="{{ site.title }}: {{ site.tagline }}">
       {% else %}
         <span class="dyn-sidebar__name">{{ site.title }}</span>
         {% if site.tagline %}<span class="dyn-sidebar__tagline">{{ site.tagline }}</span>{% endif %}
@@ -26,11 +26,16 @@
           {% else %}
             {% if page.url contains link.url %}{% assign current = true %}{% else %}{% assign current = false %}{% endif %}
           {% endif %}
+          {% comment %} A sub-menu link to a separate page (no #section), e.g. Conferences under Publications, also marks its parent {% endcomment %}
+          {% assign own_page = current %}
+          {% for child in link.children %}
+            {% unless child.url contains '#' or child.url contains '://' %}{% if page.url contains child.url %}{% assign current = true %}{% endif %}{% endunless %}
+          {% endfor %}
           {% if link.children %}
             {% comment %} Item with a sub-menu: the link goes to the page, the button opens the sub-menu underneath (open on its own page) {% endcomment %}
             <li class="dyn-sidebar__item-wrap has-children{% if current %} is-open{% endif %}">
               <div class="dyn-sidebar__row">
-                <a href="{{ href }}"{% if current %} class="is-current" aria-current="page"{% endif %}>{{ link.title }}</a>
+                <a href="{{ href }}"{% if current %} class="is-current"{% endif %}{% if own_page %} aria-current="page"{% endif %}>{{ link.title }}</a>
                 <button class="dyn-sidebar__toggle" type="button" aria-expanded="{% if current %}true{% else %}false{% endif %}" aria-controls="dyn-sub-{{ forloop.index }}" aria-label="{{ link.title }}: show sections">
                   <i class="fas fa-chevron-down" aria-hidden="true"></i>
                 </button>
@@ -38,7 +43,7 @@
               <ul class="dyn-sidebar__sub" id="dyn-sub-{{ forloop.index }}">
                 {% for child in link.children %}
                   {% if child.url contains '://' %}{% assign child_href = child.url %}{% else %}{% assign child_href = base_path | append: child.url %}{% endif %}
-                  <li><a href="{{ child_href }}">{{ child.title }}</a></li>
+                  <li><a href="{{ child_href }}"{% if page.url == child.url %} class="is-current" aria-current="page"{% endif %}>{{ child.title }}</a></li>
                 {% endfor %}
               </ul>
             </li>

@@ -36,6 +36,12 @@ $dyn-text: #3a3f44;      // body text
 $dyn-sidebar-width: clamp(230px, 18.8vw, 340px);
 $dyn-gutter: 7.5%;
 
+/* Always keep room for the scrollbar, so the page doesn't shift sideways ("vibrate") when a page
+   needs a scrollbar, or briefly does while it loads */
+html {
+  scrollbar-gutter: stable;
+}
+
 /* The template leaves room for its top menu bar, which this site replaces with the sidebar */
 body {
   padding-top: 0;
@@ -299,6 +305,12 @@ body {
         color: #fff;
       }
     }
+
+    /* current sub-page (e.g. Conferences): white and bold, without the big underline */
+    a.is-current {
+      color: #fff;
+      text-decoration: none;
+    }
   }
 
   /* Round icon links (like under the name on erickchica.com), at the bottom of the sidebar
@@ -375,8 +387,16 @@ h2[id] {
 .dyn-hero {
   position: relative;
   overflow: hidden;
+  /* the same height on every page, whatever it holds (kicker, subtitle); the text is centred vertically */
+  display: flex;
+  align-items: center;
+  min-height: 144px;
   background: $dyn-tint;
   border-bottom: 3px solid $dyn-accent;
+
+  @include breakpoint($large) {
+    min-height: 196px;
+  }
 
   /* faint dots in the main colour on the right, fading out to the left */
   &::after {
@@ -396,12 +416,13 @@ h2[id] {
   &__inner {
     position: relative;
     z-index: 1;
-    padding: 2em 1em 1.75em;
+    width: 100%;
+    padding: 1em; /* the height comes from the hero's min-height */
     text-align: center;
 
     @include breakpoint($large) {
       /* same side margins as the page below, so the title lines up with the content */
-      padding: 3.25em $dyn-gutter 2.75em;
+      padding: 1.25em $dyn-gutter;
     }
   }
 
@@ -528,6 +549,87 @@ h2[id] {
   }
 }
 
+/* Research cards on the home page: icon, title, short text, "Learn more"; the whole card is the link.
+   Three side by side on wide screens, stacked on phones */
+.dyn-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+  gap: 1.5em;
+  margin: 0 0 2.5em;
+}
+
+.dyn-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.6em 1.5em 1.4em;
+  color: $dyn-text;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid $dyn-line;
+  border-top: 4px solid $dyn-primary;
+  border-radius: 8px;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+
+  &:hover,
+  &:focus {
+    color: $dyn-text;
+    text-decoration: none;
+    border-top-color: $dyn-accent;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(17, 17, 17, 0.1);
+  }
+
+  &__icon {
+    display: block;
+    width: 3em;
+    height: 3em;
+    margin-bottom: 1em;
+    color: $dyn-primary;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .dyn-card__title {
+    margin: 0 0 0.5em;
+    font-size: 1.15em;
+    font-weight: 700;
+    color: $dyn-primary;
+  }
+
+  &__text {
+    flex: 1 1 auto; /* keeps "Learn more" at the bottom, lined up across the cards */
+    margin: 0 0 1em;
+    font-size: 0.9em;
+    line-height: 1.55;
+  }
+
+  &__more {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: $dyn-primary;
+  }
+
+  &:hover &__more {
+    text-decoration: underline;
+    text-decoration-color: $dyn-accent;
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* the template underlines every link in page content (.page__content a); not the whole card */
+.page__content a.dyn-card {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
 /* News list */
 .dyn-news {
   margin: 0 0 1em;
@@ -551,8 +653,8 @@ h2[id] {
   }
 }
 
-/* Members page: directory layout. Small uppercase section labels with a line, the professor large
-   with a round photo, everyone else as compact rows (photo, name/role/research, link icons).
+/* Members page: directory layout. Small uppercase section labels with a line, the PI large
+   with a round photo, everyone else as cards (photo, name/role/research, link icons).
    Rules start with .dyn-people so they beat the page's own heading/paragraph styles. */
 @mixin dyn-initials($size) {
   display: flex;
@@ -597,7 +699,7 @@ h2[id] {
     color: $dyn-primary;
   }
 
-  /* professor, in the style of jeongresearch.org/current */
+  /* PI, in the style of jeongresearch.org/current */
   .dyn-pi {
     display: flex;
     flex-wrap: wrap;
@@ -672,36 +774,37 @@ h2[id] {
     white-space: nowrap;
   }
 
-  /* everyone else */
+  /* everyone else: a grid of cards (round photo, name, role, research line, link icons), centred */
   .dyn-people__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
+    gap: 1.5em;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .dyn-people__row {
-    display: grid;
-    grid-template-columns: 72px minmax(0, 1fr) auto;
-    gap: 0.5em 1.25em;
+  .dyn-people__card {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     margin: 0;
-    padding: 1em 0;
-    border-bottom: 1px solid $dyn-line;
-
-    &:first-child {
-      border-top: 1px solid $dyn-line;
-    }
+    padding: 1.25em 1em;
+    text-align: center;
+    border: 1px solid $dyn-line;
+    border-radius: 8px;
   }
 
   .dyn-people__avatar {
-    width: 72px;
-    height: 72px;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 0.8em;
     object-fit: cover;
     border-radius: 50%;
   }
 
   .dyn-people__avatar--empty {
-    @include dyn-initials(1.3em);
+    @include dyn-initials(2em);
   }
 
   .dyn-people__research {
@@ -710,14 +813,43 @@ h2[id] {
   }
 
   .dyn-people__icons {
-    margin: 0;
+    margin: auto 0 0; /* pushed to the bottom, so icons line up across cards of different heights */
+    padding-top: 0.6em;
     white-space: nowrap;
 
     a {
-      margin-left: 0.6em;
+      margin: 0 0.3em;
       font-size: 1.2em;
       color: $dyn-primary;
     }
+  }
+
+  /* low-key list (M.S. & B.S. students): no photos, small text, columns */
+  .dyn-people__minor {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
+    gap: 0.6em 2em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85em;
+    line-height: 1.4;
+
+    li {
+      margin: 0;
+    }
+  }
+
+  .dyn-people__minor-name {
+    display: block;
+    font-weight: 600;
+    color: $dyn-dark;
+  }
+
+  .dyn-people__minor-meta {
+    display: block;
+    font-size: 0.9em;
+    color: mix(#fff, $dyn-dark, 35%);
   }
 }
 
