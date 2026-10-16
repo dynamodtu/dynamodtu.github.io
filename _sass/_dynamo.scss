@@ -748,60 +748,87 @@ h2[id] {
   color: $dyn-primary;
   border: 0;
 
+  @media (max-width: #{$small - 1px}) {
+    font-size: 1.65em;
+  }
+
   b {
     font-weight: 800;
   }
 }
 
+/* Welcome: on wide screens the photo (4:3) on the left and the text with the buttons under it on the right,
+   the two centred on each other in height. Narrower, the text column would get too thin, so the photo
+   (16:9) sits above the text */
 .dyn-welcome {
-  display: flow-root; /* contains the floated photo, so the next section always starts below it */
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25em 2em;
 
-  /* the photo floats left and the text wraps around it */
-  &__photo {
-    float: left;
-    width: 38%;
-    margin: 0.3em 1.6em 0.8em 0;
-
-    @media (max-width: 600px) {
-      float: none;
-      width: 100%;
-      margin-right: 0;
+    @include breakpoint($x-large) {
+      grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+      align-items: center;
     }
+  }
+
+  /* the photo fills this box, cropped to its shape */
+  &__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+
+    @include breakpoint($x-large) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  &__photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__photo--empty {
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 16 / 10;
     font-size: 0.85em;
     color: var(--global-text-color-light);
     background: $dyn-tint;
     border: 1px dashed $dyn-line;
   }
 
-  p {
-    line-height: 1.7;
+  /* the text and the buttons as one block, with no space above or below it, so centring it is exact */
+  &__text {
+    p {
+      margin-top: 0;
+      line-height: 1.7;
+    }
   }
 
   .dyn-welcome__more {
-    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    margin: 0;
     padding-top: 0.4em;
 
-    a {
-      margin-right: 1.4em;
-      font-weight: bold;
+    .dyn-btn,
+    .dyn-btn-outline {
+      margin: 0;
       white-space: nowrap;
-      text-decoration: none;
     }
   }
 }
 
-/* latest news (navy panel) and recent publications (light panel, like the page banners) side by side,
-   each only as tall as its content; stacked on smaller screens */
+/* latest news and recent publications side by side, both light panels like the page banners and the
+   collaborators strip, each only as tall as its content; stacked on smaller screens */
 .dyn-duo {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr); /* minmax(0, ...): a long one-line title must not widen the column past the screen */
   gap: 2.5em 2em;
   align-items: start;
   margin: 3em 0 0;
@@ -814,11 +841,12 @@ h2[id] {
     display: flex;
     flex-direction: column;
     padding: 0.6em 2em 1.4em;
-    color: #fff;
-  }
+    color: $dyn-text;
+    background: $dyn-tint;
 
-  &__col--news &__panel {
-    background: $dyn-primary;
+    @media (max-width: #{$small - 1px}) {
+      padding: 0.4em 1.25em 1.2em;
+    }
   }
 
   .dyn-duo__list {
@@ -833,7 +861,7 @@ h2[id] {
     gap: 1.2em;
     margin: 0;
     padding: 1.15em 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    border-bottom: 1px solid $dyn-line;
 
     &:last-child {
       border-bottom: 0;
@@ -851,13 +879,14 @@ h2[id] {
     font-size: 1em;
     font-weight: 600;
     line-height: 1.4;
-    color: #fff;
+    color: $dyn-dark;
     text-decoration: none;
     white-space: nowrap;
     text-overflow: ellipsis; /* news titles: one line, "..." when longer */
 
     &:hover,
     &:focus {
+      color: $dyn-primary;
       text-decoration: underline;
       text-decoration-color: $dyn-accent;
     }
@@ -870,15 +899,25 @@ h2[id] {
     -webkit-box-orient: vertical;
   }
 
+  /* phones: news titles get two lines too, one line is too short there */
+  @media (max-width: #{$small - 1px}) {
+    a.dyn-duo__title {
+      display: -webkit-box;
+      white-space: normal;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+
   &__meta {
     display: block;
     margin-top: 0.3em;
     font-size: 0.8em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--global-text-color-light);
 
     b,
     strong {
-      color: rgba(255, 255, 255, 0.9);
+      color: $dyn-dark;
     }
   }
 
@@ -895,16 +934,16 @@ h2[id] {
     justify-content: center;
     width: 2.3em;
     height: 2.3em;
-    color: #fff;
+    color: $dyn-primary;
     text-decoration: none;
-    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border: 1.5px solid $dyn-primary;
     border-radius: 50%;
     transition: background-color 0.15s, color 0.15s;
 
     &:hover,
     &:focus {
-      color: $dyn-primary;
-      background: #fff;
+      color: #fff;
+      background: $dyn-primary;
     }
   }
 
@@ -913,7 +952,7 @@ h2[id] {
     margin-top: 0.6em;
     font-size: 0.85em;
     font-weight: bold;
-    color: $dyn-accent;
+    color: $dyn-primary;
     text-decoration: none;
 
     &:hover,
@@ -921,76 +960,78 @@ h2[id] {
       text-decoration: underline;
     }
   }
-
-  /* the publications panel: light, with dark text and the site's thin grey lines */
-  &__col--pubs {
-    .dyn-duo__panel {
-      color: $dyn-text;
-      background: $dyn-tint;
-    }
-
-    .dyn-duo__item {
-      border-bottom-color: $dyn-line;
-    }
-
-    a.dyn-duo__title {
-      color: $dyn-dark;
-
-      &:hover,
-      &:focus {
-        color: $dyn-primary;
-      }
-    }
-
-    .dyn-duo__meta {
-      color: var(--global-text-color-light);
-
-      b,
-      strong {
-        color: $dyn-dark;
-      }
-    }
-
-    a.dyn-duo__all {
-      color: $dyn-primary;
-    }
-  }
 }
 
-/* collaborators: a light grey strip with their logos (or names) in a row */
+/* collaborators: a light grey strip, heading and logos centred. Each logo (or name) sits in the middle of an
+   equal slot: 4 per row on wide screens, 3 on laptops and tablets, 2 on phones; a last row that isn't full
+   is centred too */
 .dyn-partners {
+  /* the area each logo covers, in px²: a wide logo comes out lower and a tall one narrower, so all look equally big */
+  --dyn-logo-area: 6800;
+
   margin: 3em 0 0;
   padding: 2.2em 2em 2.4em;
   background: $dyn-tint;
 
+  @media (max-width: #{$small - 1px}) {
+    --dyn-logo-area: 3400;
+    padding: 1.6em 1.25em 1.8em;
+  }
+
+  .dyn-home__heading {
+    text-align: center;
+  }
+
   &__list {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 1.5em 3em;
+    justify-content: center;
+    row-gap: 2em;
     margin: 0;
     padding: 0;
     list-style: none;
+
+    @media (max-width: #{$small - 1px}) {
+      row-gap: 1.5em;
+    }
   }
 
   &__item {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 64px; /* the tallest a logo gets, so logos of any height share one centre line */
     margin: 0;
+    padding: 0 0.75em;
 
-    img {
-      display: block;
-      width: auto;
-      max-width: 220px;
-      height: 56px;
-      object-fit: contain;
+    @include breakpoint($small) {
+      flex-basis: 33.333%;
     }
 
-    a {
-      text-decoration: none;
+    @include breakpoint($x-large) {
+      flex-basis: 25%;
+      padding: 0 1.25em;
     }
   }
 
+  &__item img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  /* height = square root of (area x height / width), at most 64px */
+  &__item img.dyn-partners__logo--sized {
+    height: calc(sqrt(var(--dyn-logo-area) * var(--logo-h) / var(--logo-w)) * 1px);
+    max-height: 64px;
+  }
+
   &__name {
-    font-size: 1.15em;
+    font-size: 1.1em;
     font-weight: 700;
     color: $dyn-dark;
   }

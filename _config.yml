@@ -25,17 +25,17 @@ footer:
   organisation_url : "https://www.dtu.dk"
   logos:
     - name : "IDUN"
-      file : "/images/idun-logo.svg"
+      file : "/images/logos/idun.svg"
       url  :                        # link for the logo (optional)
       width: 331                    # the file's own size or proportions (optional), so the footer doesn't shift while it loads
       height: 113
     - name : "Technical University of Denmark"
-      file : "/images/dtu-logo.svg"
+      file : "/images/logos/dtu.svg"
       url  : "https://www.dtu.dk"
       width: 479
       height: 694
 sidebar_pattern          : nodes  # faint background in the sidebar: nodes | waves | dots | none (images/patterns/)
-logo                     : "/images/dynamo-logo-white.svg" # top of the sidebar, in place of the title. White version for the navy sidebar; full colour: /images/dynamo-logo.svg
+logo                     : "/images/logos/dynamo-white.svg" # top of the sidebar, in place of the title. White version for the navy sidebar; full colour: /images/logos/dynamo.svg
 repository               : "dynamodtu/dynamodtu.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.

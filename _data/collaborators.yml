@@ -1,11 +1,45 @@
-# Collaborators, shown as a strip of logos at the bottom of the home page, in this order.
-# `logo`: image file (e.g. in /images/collaborators/); without one, the name is shown as text.
-# `url`: optional link. TODO: complete the list.
+# Collaborators, shown as a grid of logos at the bottom of the home page, in this order.
+# `logo`: image file, kept in /images/logos/; without one, the name is shown as text.
+# `width` / `height`: the logo file's own size or proportions (optional). With them, wide and tall logos are
+#   sized to look equally big; without them, the logo is simply 48px tall.
+# TODO: complete the list.
+
+- name: "DTU – Technical University of Denmark"
+  logo: /images/logos/dtu-red.svg
+  width: 479
+  height: 694
 
 - name: "IDUN – Prof. Anja Boisen, DTU"
-  logo: /images/idun-logo.svg
-  url:
+  logo: /images/logos/idun.svg
+  width: 331
+  height: 113
 
 - name: "Lightnovo"
-  logo:                # TODO: add their logo, e.g. /images/collaborators/lightnovo.svg
-  url: https://www.lightnovo.com
+  logo: /images/logos/lightnovo.png
+  width: 780
+  height: 132
+
+- name: "CEITEC – Central European Institute of Technology"
+  logo: /images/logos/ceitec.svg
+  width: 356
+  height: 45
+
+- name: "SDU – University of Southern Denmark"
+  logo: /images/logos/sdu.svg
+  width: 331
+  height: 89
+
+- name: "University of Copenhagen"
+  logo: /images/logos/university-of-copenhagen.svg
+  width: 313
+  height: 73
+
+- name: "University of Belgrade"
+  logo: /images/logos/university-of-belgrade.png
+  width: 1666
+  height: 339
+
+- name: "Lundbeck Foundation"
+  logo: /images/logos/lundbeck-foundation.svg
+  width: 978
+  height: 241
