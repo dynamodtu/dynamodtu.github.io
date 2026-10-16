@@ -1,0 +1,11 @@
+# Collaborators, shown as a strip of logos at the bottom of the home page, in this order.
+# `logo`: image file (e.g. in /images/collaborators/); without one, the name is shown as text.
+# `url`: optional link. TODO: complete the list.
+
+- name: "IDUN – Prof. Anja Boisen, DTU"
+  logo: /images/idun-logo.svg
+  url:
+
+- name: "Lightnovo"
+  logo:                # TODO: add their logo, e.g. /images/collaborators/lightnovo.svg
+  url: https://www.lightnovo.com

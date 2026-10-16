@@ -1,10 +1,12 @@
 ---
-# Placeholder: replace with a real PhD student (or delete this file).
+# TODO: email (still a placeholder)
 name: Erick Chica
 section: phd-students
 order: 3
 role: Ph.D. Student
-research: "Research topic"
+co_supervised: true
+main_supervisor: "Prof. Anja Boisen"
+research: "Oral drug delivery"
 email: firstname.lastname@dtu.dk
 photo: /images/members/erick-chica.jpg
 ---

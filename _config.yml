@@ -34,6 +34,7 @@ footer:
       url  : "https://www.dtu.dk"
       width: 479
       height: 694
+sidebar_pattern          : nodes  # faint background in the sidebar: nodes | waves | dots | none (images/patterns/)
 logo                     : "/images/dynamo-logo-white.svg" # top of the sidebar, in place of the title. White version for the navy sidebar; full colour: /images/dynamo-logo.svg
 repository               : "dynamodtu/dynamodtu.github.io"
 
@@ -122,9 +123,10 @@ publications_page:
   show_thumbnails: false        # small figure next to each paper (its `thumbnail:`); false = text-only list
 
 # Member sections on the Members page, in order. Each member's file in _members/ says which one with `section:`.
-# The ids are also the links in the Members sub-menu (/members/#phd-students).
+# The ids are also the links in the Members sub-menu.
 # `layout: profile` shows a section's people large (round photo, details lists, contact details);
-# `layout: list` is a low-key multi-column list without photos: name, then role and `research` line in small grey text;
+# `layout: list` is a low-key multi-column list without photos, with the names from _members/students.md
+#   (the list under the section's id, in that order);
 # other sections are a grid of cards: round photo, name, role, `research` line and link icons.
 # `empty:` is the note shown while a section has nobody in it.
 member_sections:
@@ -135,8 +137,14 @@ member_sections:
     title: Postdoctoral Researchers
   - id: phd-students
     title: Ph.D. Students
-  - id: masters-bachelors
-    title: M.S. & B.S. Students
+  - id: masters
+    title: M.S. Students
+    layout: list
+  - id: bachelors
+    title: B.S. Students
+    layout: list
+  - id: special-course
+    title: Special Course Students
     layout: list
   - id: alumni
     title: Alumni
@@ -280,6 +288,12 @@ collections:
     output: false
   members:              # one file per person
     output: false
+  research:             # one file per research area: its own page at /research/<name>/, and a card on /research/
+    output: true
+    permalink: /research/:name/
+  news:                 # one file per news post: its own page at /news/<name>/, listed on /news/ and the home page
+    output: true
+    permalink: /news/:name/
 
 
 # These settings control how pages and collections are included in the site.
@@ -292,6 +306,23 @@ defaults:
     values:
       layout: single
       author_profile: false
+  # _research
+  - scope:
+      path: ""
+      type: research
+    values:
+      layout: research-area
+      author_profile: false
+      hero: true
+  # _news
+  - scope:
+      path: ""
+      type: news
+    values:
+      layout: news-post
+      author_profile: false
+      hero: true
+      kicker: News
   # _publications
   - scope:
       path: ""

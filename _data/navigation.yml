@@ -1,6 +1,6 @@
 # The links in the sidebar menu, in order.
 # `children` adds a sub-menu (shown to the right on hover on large screens, indented on phones).
-# Sub-menu links point to a section of the page: /page/#section-id
+# Sub-menu links point to a section of the page (/page/#section-id) or to a page of its own (/research/oral-drug-delivery/).
 # Removing a link hides it from the menu, but does not remove the page itself.
 
 main:
@@ -10,12 +10,14 @@ main:
   - title: "Research"
     url: /research/
     children:
-      - title: "Metal-based microrobots"
-        url: /research/#metal-based-microrobots
-      - title: "Polymer-based microrobots"
-        url: /research/#polymer-based-microrobots
-      - title: "Nature-based microrobots"
-        url: /research/#nature-based-microrobots
+      - title: "Skin & wound therapy"
+        url: /research/skin-and-wound-therapy/
+      - title: "Nose-to-brain drug delivery"
+        url: /research/nose-to-brain-drug-delivery/
+      - title: "Oral drug delivery"
+        url: /research/oral-drug-delivery/
+      - title: "SERS sensing"
+        url: /research/sers-sensing/
 
   - title: "Publications"
     url: /publications/
@@ -34,8 +36,8 @@ main:
         url: /members/#postdocs
       - title: "Ph.D. Students"
         url: /members/#phd-students
-      - title: "M.S. & B.S. Students"
-        url: /members/#masters-bachelors
+      - title: "Students"
+        url: /members/#masters
       - title: "Alumni"
         url: /members/#alumni
 

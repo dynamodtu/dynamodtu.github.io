@@ -1,0 +1,20 @@
+---
+layout: default
+---
+{% comment %}
+  One news post (a file in _news/): the banner shows "News" and the title, then the date,
+  the optional photo (`image:`), the text, and a link back to all news.
+{% endcomment %}
+{% include base_path %}
+<div id="main" role="main">
+  <article class="page">
+    <div class="page__inner-wrap">
+      <section class="page__content dyn-post">
+        <p class="dyn-post__date"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%B %-d, %Y" }}</time></p>
+        {% if page.image %}<img class="dyn-post__image" src="{{ page.image | relative_url }}" alt="">{% endif %}
+        {{ content }}
+        <p class="dyn-post__back"><a href="{{ base_path }}/news/">&larr; All news</a></p>
+      </section>
+    </div>
+  </article>
+</div>
