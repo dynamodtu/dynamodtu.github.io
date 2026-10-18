@@ -361,7 +361,7 @@ body {
     }
   }
 
-  /* Round icon links (like under the name on erickchica.com), at the bottom of the sidebar
+  /* Round icon links at the bottom of the sidebar
      on large screens (like kireevlab.com) and at the end of the menu on phones */
   &__social {
     display: flex;
@@ -539,12 +539,56 @@ h2[id] {
     height: 100%;
     object-fit: cover;
   }
-}
 
-/* Visitors who ask their device to reduce motion see the still image instead of the video */
-@media (prefers-reduced-motion: reduce) {
-  .dyn-hero__video {
+  /* Pause / play button for the video, in the bottom right corner (made to work by assets/js/dyn-hero.js):
+     just a small faint icon, brighter on hover; the clickable area around it stays 34px */
+  &__pause {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: rgba(#fff, 0.6);
+    background: none;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.15s;
+
+    &:hover,
+    &:focus-visible {
+      color: #fff;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $dyn-accent;
+      outline-offset: 0;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.45)); /* stays visible over light parts of a video */
+    }
+  }
+
+  &__play-icon,
+  &.is-paused &__pause-icon {
     display: none;
+  }
+
+  &.is-paused &__play-icon {
+    display: block;
   }
 }
 

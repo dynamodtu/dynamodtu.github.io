@@ -10,11 +10,16 @@ address:                       # postal address, one line each
   - Ørsteds Plads, Building 345C
   - DK-2800 Kongens Lyngby, Denmark
 address_local:                 # optional: the same address in another language, one line each
-map:                           # Google map (same free embed as erickchica.com)
+map:                           # Google map (free embed, no API key)
   query: "55.781499,12.51797"  # coordinates (DTU building 345) give a plain pin; a place name, e.g. "DTU Health Tech", adds Google's info card
   zoom: 14                    # higher = closer (15 shows more of the campus, 17 just the building)
 applications:
-  intro:                       # optional paragraph above "Send directly to ..."
+  # optional text above "Send directly to ...", e.g. the open positions. Links as in news posts: [text](/news/...).
+  # Remove the open positions again once their deadline has passed.
+  intro: >
+    We are currently hiring a **[Postdoc](/news/2026-10-18-hiring-postdoc/)** (apply by 26 October 2026) and a
+    **[Ph.D. student](/news/2026-10-18-hiring-phd/)** (apply by 3 November 2026). Apply through DTU's job portal,
+    linked in each announcement. For anything else, such as M.Sc. projects:
   name: "Tijana"
   email: "tijma@dtu.dk"
 ---
@@ -22,7 +27,7 @@ applications:
 {% include base_path %}
 <div class="dyn-contact">
   {% if page.map %}
-  {% comment %} Google Maps embed in the same form as erickchica.com's contact page (spaces as %20) {% endcomment %}
+  {% comment %} Google Maps embed (spaces as %20) {% endcomment %}
   {% assign map_query = page.map.query | uri_escape | replace: ",", "%2C" %}
   <div class="dyn-contact__map">
     <iframe src="https://maps.google.com/maps?q={{ map_query }}&amp;t=&amp;z={{ page.map.zoom | default: 16 }}&amp;ie=UTF8&amp;iwloc=&amp;output=embed" title="Map: {{ page.address | join: ', ' }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -45,7 +50,7 @@ applications:
 
     <section class="dyn-contact__block" id="join">
       <h2 class="dyn-contact__title"><b>Position</b> applications</h2>
-      {% if page.applications.intro %}<p>{{ page.applications.intro }}</p>{% endif %}
+      {% if page.applications.intro %}{{ page.applications.intro | markdownify }}{% endif %}
       {% if page.applications.email %}
       <p>Send directly to {{ page.applications.name }}:<br>
         {% include email-link.html address=page.applications.email label="Email" show=true %}

@@ -9,7 +9,6 @@ role: Ph.D. Student
 co_supervised:              # true if Tijana is co-supervisor (shows "Co-supervised" under the role)
 main_supervisor:            # optional, with co_supervised: e.g. "Prof. Anja Boisen" -> "Co-supervised with ..."
 photo: /images/members/firstname-lastname.jpg   # square photo; without one, their initials are shown
-author_key:                 # their key in _data/authors.yml, so they are shown in bold in publication author lists
 research: "Project or research area"   # one short line under their role
 email: firstname.lastname@dtu.dk
 scholar:

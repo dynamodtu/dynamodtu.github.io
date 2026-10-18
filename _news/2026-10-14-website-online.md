@@ -1,5 +1,5 @@
 ---
-# A news post: its own page at /news/<file name>/, listed on the News page and (the three newest) on the home page.
+# A news post: its own page at /news/<file name>/, listed on the News page and (the four newest) on the home page.
 # Copy this file to add a post: name it YYYY-MM-DD-short-title.md and change the lines below.
 title: "The DYNAMO website is online"
 date: 2026-10-14

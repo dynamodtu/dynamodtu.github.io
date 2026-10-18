@@ -104,8 +104,7 @@ author:
   youtube          : # Username
   zhihu            : # Username
 
-# Publication categories, in the order shown on the Publications page. Same keys as erickchica.com,
-# so a paper file copied from there works unchanged. Each key is also the section's id on the page
+# Publication categories, in the order shown on the Publications page. Each key is also the section's id on the page
 # (/publications/#journals). `also:` lists other categories shown in that section.
 # Talks and posters are not publications: they are listed on the Conferences page (_data/conferences.yml).
 publication_category:
@@ -284,7 +283,7 @@ kramdown:
 
 # These settings control the types of collections used by the template
 collections:
-  publications:         # one file per paper (same format as erickchica.com)
+  publications:         # one file per paper
     output: false
   members:              # one file per person
     output: false

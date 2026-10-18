@@ -9,7 +9,8 @@
     video: /images/hero/file-name.mp4          (optional background video: muted, looping, .mp4 or .webm)
     poster: /images/hero/file-name.jpg         (optional still shown while the video loads; defaults to `image`)
 
-  With a video, `poster` (or `image`) is also what visitors see if their device is set to reduce motion.
+  The video always plays (also for visitors whose device asks for reduced motion); `poster` (or `image`)
+  is shown while it loads, or if it can't play.
 
   A page under a main section without a video or photo of its own uses the section's (its video, poster and
   image; the title stays its own). Its section is the menu item whose sub-menu links to it (_data/navigation.yml,
@@ -49,6 +50,11 @@
     <video class="dyn-hero__video" autoplay muted loop playsinline preload="auto" aria-hidden="true"{% if hero_still %} poster="{{ hero_still_url }}"{% endif %}>
       <source src="{{ hero_video_url }}" type="video/{% if hero_video_ext == 'webm' %}webm{% else %}mp4{% endif %}">
     </video>
+    {% comment %} pause / play button: hidden until assets/js/dyn-hero.js runs, which makes it work {% endcomment %}
+    <button class="dyn-hero__pause" type="button" aria-label="Pause the background video" title="Pause the background video" hidden>
+      <svg class="dyn-hero__pause-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="0.6"/><rect x="9.5" y="2.5" width="3" height="11" rx="0.6"/></svg>
+      <svg class="dyn-hero__play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 2.9v10.2a.7.7 0 0 0 1.07.6l8.06-5.1a.7.7 0 0 0 0-1.2L6.07 2.3A.7.7 0 0 0 5 2.9z"/></svg>
+    </button>
   {% endif %}
   <div class="dyn-hero__inner">
     {% if hero_kicker %}<p class="dyn-hero__kicker">{{ hero_kicker }}</p>{% endif %}

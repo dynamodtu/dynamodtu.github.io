@@ -4,7 +4,7 @@
 # - date: 2026-06-15                  # day of the presentation (only the year is shown)
 #   type: Talk                        # Talk | Poster | Invited talk | Keynote | Workshop ... (shown as a label)
 #   title: "Title of the contribution"
-#   presenters: "**T. Maric**, E. Chica"   # Markdown: **bold** for group members
+#   presenters: "**T. Maric**, J. Doe"   # Markdown: Tijana in **bold**, as in the paper lists
 #   event: "Name of the conference 2026"
 #   location: "Copenhagen, Denmark"
 #   url: https://example.org          # link for the title (abstract, programme, slides...)
@@ -22,7 +22,7 @@
 - date: 2025-09-10
   type: Poster
   title: "Example poster title"
-  presenters: "**E. Chica**, **T. Maric**"
+  presenters: "Z. Li, **T. Maric**"
   event: "Example Symposium 2025"
   location: "City, Country"
   sample: true

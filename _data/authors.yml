@@ -1,61 +1,24 @@
 # Usage:
 # - Define each person once with `first`, optional `middle`, `last1`, optional `last2`.
-# - Default render is `last1, first`. 
+# - Default render is `last1, first`.
 # - Add `variant: hyphenated` (→ `last1-last2, first`) or variant: compound (last1 last2)
 # - Add `display_last` / `display_first` to force a custom string.
 # - In a publication you can override per entry:
 #     authors:
-#       - key: erick                 # use defaults below
-#       - key: erick
+#       - key: tijana                # use defaults below
+#       - key: someone
 #         variant: hyphenated        # switch to last1-last2 form for this paper only
-#         display_first: "Erick Christian"
+#         display_first: "Firstname Middlename"
 #       - key: collaborator
 #         last1: Ramirez             # override surname inline
 # - Legacy `"Last, First"` strings still work and fall back to the old parser.
 # Options for author_format:
-# - last_first → Chica, Erick
-# - last_initial → Chica, E.
-# - initial_last → E. Chica
-# - last_first_nocomma → Chica Erick
-# - first_last → Erick Chica
-# - initials_only → E. (handy for compact CVs)
-
-# === ME ====
-erick:
-  first: Erick
-  last1: Chica
-  last2: Carrillo
-
-# === KAIST ====
-yoojeong:
-  first: Yoojeong
-  last1: Kim
-
-hojae:
-  first: Hojae
-  last1: Jang
-
-youngak:
-  first: Yeongkag
-  last1: Kwon
-
-yeongsun:
-  first: Youngsun
-  last1: Lee
-
-miok:
-  first: "Mi-Ok"
-  last1: Lee
-
-hyunjoo:
-  first: Hyunjoo
-  middle: Jenny
-  last1: Lee
-
-kiup:
-  first: Kiup
-  last1: Kim
-
+# - last_first → Maric, Tijana
+# - last_initial → Maric, T.
+# - initial_last → T. Maric
+# - last_first_nocomma → Maric Tijana
+# - first_last → Tijana Maric
+# - initials_only → T. (handy for compact CVs)
 
 # === DTU ====
 tijana:
@@ -76,4 +39,9 @@ ziqiao:
 
 yaman:
   first: Yaman
-  last1: Göksel  
+  last1: Göksel
+
+erick:
+  first: Erick
+  last1: Chica
+  last2: Carrillo

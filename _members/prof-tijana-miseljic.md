@@ -7,7 +7,7 @@ affiliation:                # lines under the role
   - Department of Health Technology
   - Technical University of Denmark (DTU)
 photo: /images/members/tijana-miseljic.jpg
-author_key: tijana          # key in _data/authors.yml -> this name is shown in bold in publication author lists
+author_key: tijana          # key in _data/authors.yml -> her name is shown in bold in publication author lists (only she has one)
 office: Ørsteds Plads, Building 345C, Office 116
 phone:
 email: tijma@dtu.dk
