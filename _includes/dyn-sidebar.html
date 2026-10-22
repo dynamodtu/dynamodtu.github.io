@@ -30,6 +30,7 @@
           {% assign own_page = current %}
           {% for child in link.children %}
             {% unless child.url contains '#' or child.url contains '://' %}{% if page.url contains child.url %}{% assign current = true %}{% endif %}{% endunless %}
+            {% for grandchild in child.children %}{% if page.url == grandchild.url %}{% assign current = true %}{% endif %}{% endfor %}
           {% endfor %}
           {% if link.children %}
             {% comment %} Item with a sub-menu: the link goes to the page, the button opens the sub-menu underneath (open on its own page) {% endcomment %}
@@ -40,10 +41,32 @@
                   <i class="fas fa-chevron-down" aria-hidden="true"></i>
                 </button>
               </div>
-              <ul class="dyn-sidebar__sub" id="dyn-sub-{{ forloop.index }}">
+              {% assign link_index = forloop.index %}
+              <ul class="dyn-sidebar__sub" id="dyn-sub-{{ link_index }}">
                 {% for child in link.children %}
                   {% if child.url contains '://' %}{% assign child_href = child.url %}{% else %}{% assign child_href = base_path | append: child.url %}{% endif %}
+                  {% if child.children %}
+                    {% comment %} A sub-menu item with its own sub-menu (e.g. Research > Projects > the research areas): open on its pages {% endcomment %}
+                    {% assign child_open = false %}
+                    {% if page.url == child.url %}{% assign child_open = true %}{% endif %}
+                    {% for grandchild in child.children %}{% if page.url == grandchild.url %}{% assign child_open = true %}{% endif %}{% endfor %}
+                    <li class="dyn-sidebar__item-wrap has-children{% if child_open %} is-open{% endif %}">
+                      <div class="dyn-sidebar__row">
+                        <a href="{{ child_href }}"{% if page.url == child.url %} class="is-current" aria-current="page"{% endif %}>{{ child.title }}</a>
+                        <button class="dyn-sidebar__toggle" type="button" aria-expanded="{% if child_open %}true{% else %}false{% endif %}" aria-controls="dyn-sub-{{ link_index }}-{{ forloop.index }}" aria-label="{{ child.title }}: show sections">
+                          <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                      <ul class="dyn-sidebar__sub" id="dyn-sub-{{ link_index }}-{{ forloop.index }}">
+                        {% for grandchild in child.children %}
+                          {% if grandchild.url contains '://' %}{% assign grandchild_href = grandchild.url %}{% else %}{% assign grandchild_href = base_path | append: grandchild.url %}{% endif %}
+                          <li><a href="{{ grandchild_href }}"{% if page.url == grandchild.url %} class="is-current" aria-current="page"{% endif %}>{{ grandchild.title }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                  {% else %}
                   <li><a href="{{ child_href }}"{% if page.url == child.url %} class="is-current" aria-current="page"{% endif %}>{{ child.title }}</a></li>
+                  {% endif %}
                 {% endfor %}
               </ul>
             </li>

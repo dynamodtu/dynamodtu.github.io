@@ -7,7 +7,7 @@ hero: true
 {% include base_path %}
 {% comment %}
   Talks, posters and other conference contributions from _data/conferences.yml, newest first, grouped by
-  year with the same year filter and look as the Publications page (_sass/_dyn-publications.scss).
+  year with the same year filter and look as the Publications page (the kind of contribution is a yellow label, like "Cover Feature") (_sass/_dyn-publications.scss).
 {% endcomment %}
 {% assign talks = site.data.conferences | sort: "date" | reverse %}
 
@@ -39,13 +39,13 @@ hero: true
           <li class="dyn-pub dyn-pub--text">
             <div class="dyn-pub__body">
               <p class="dyn-pub__title">
-                {% if talk.type %}<span class="dyn-talk__type">{{ talk.type }}</span>{% endif %}
                 {% if talk.url %}<a href="{{ talk.url }}" target="_blank" rel="noopener">{{ talk.title }}</a>{% else %}{{ talk.title }}{% endif %}
                 {% if talk.sample %}<span class="dyn-pub__sample">sample</span>{% endif %}
               </p>
               {% if talk.presenters %}<p class="dyn-pub__authors">{{ talk.presenters | markdownify | remove: "<p>" | remove: "</p>" | strip }}</p>{% endif %}
               <p class="dyn-pub__venue">
                 <b><i>{{ talk.event }}</i></b>{% if talk.location %}, {{ talk.location }}{% endif %}.
+                {% if talk.type %}<span class="dyn-pub__cover">{{ talk.type }}</span>{% endif %}
                 {% if talk.pdf %}<a class="dyn-pub__pdf" href="{{ talk.pdf | relative_url }}" target="_blank" rel="noopener"><i class="fas fa-file-pdf" aria-hidden="true"></i> PDF</a>{% endif %}
               </p>
             </div>

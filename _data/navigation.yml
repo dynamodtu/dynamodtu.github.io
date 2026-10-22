@@ -10,14 +10,19 @@ main:
   - title: "Research"
     url: /research/
     children:
-      - title: "Skin & wound therapy"
-        url: /research/skin-and-wound-therapy/
-      - title: "Nose-to-brain drug delivery"
-        url: /research/nose-to-brain-drug-delivery/
-      - title: "Oral drug delivery"
-        url: /research/oral-drug-delivery/
-      - title: "SERS sensing"
-        url: /research/sers-sensing/
+      - title: "Projects"
+        url: /research/
+        children:            # a sub-menu inside the sub-menu (one more level is possible here, not deeper)
+          - title: "Skin & wound therapy"
+            url: /research/skin-and-wound-therapy/
+          - title: "Nose-to-brain drug delivery"
+            url: /research/nose-to-brain-drug-delivery/
+          - title: "Oral drug delivery"
+            url: /research/oral-drug-delivery/
+          - title: "SERS sensing"
+            url: /research/sers-sensing/
+      - title: "Funding"
+        url: /funding/
 
   - title: "Publications"
     url: /publications/

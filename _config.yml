@@ -126,6 +126,8 @@ publications_page:
 # `layout: profile` shows a section's people large (round photo, details lists, contact details);
 # `layout: list` is a low-key multi-column list without photos, with the names from _members/students.md
 #   (the list under the section's id, in that order);
+# `layout: wide` gives each person a wide card with their short description (the text under the front
+#   matter of their file in _members/), two per row;
 # other sections are a grid of cards: round photo, name, role, `research` line and link icons.
 # `empty:` is the note shown while a section has nobody in it.
 member_sections:
@@ -134,8 +136,10 @@ member_sections:
     layout: profile
   - id: postdocs
     title: Postdoctoral Researchers
+    layout: wide
   - id: phd-students
     title: Ph.D. Students
+    layout: wide
   - id: masters
     title: M.S. Students
     layout: list

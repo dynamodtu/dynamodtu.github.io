@@ -24,10 +24,10 @@
   width: 356
   height: 45
 
-- name: "SDU – University of Southern Denmark"
-  logo: /images/logos/sdu.svg
-  width: 331
-  height: 89
+- name: "LEO Foundation"
+  logo: /images/logos/leo-foundation.png
+  width: 800
+  height: 296
 
 - name: "University of Copenhagen"
   logo: /images/logos/university-of-copenhagen.svg

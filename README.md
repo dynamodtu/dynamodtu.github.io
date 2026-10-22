@@ -115,7 +115,9 @@ Researchers**, **Ph.D. Students**, **M.S. Students**, **B.S. Students**, **Speci
    order: 4                    # position within the section, lower comes first
    role: Ph.D. Student
    co_supervised:              # true if Tijana is co-supervisor
-   main_supervisor:            # with co_supervised, e.g. "Prof. Anja Boisen"
+   supervisors:                # with co_supervised: the other supervisors, one per line,
+     - "Firstname Lastname"    # main supervisor last
+     - "Anja Boisen"
    photo: /images/members/firstname-lastname.jpg
    research: "Oral drug delivery"
    email: firstname.lastname@dtu.dk
@@ -124,9 +126,12 @@ Researchers**, **Ph.D. Students**, **M.S. Students**, **B.S. Students**, **Speci
    linkedin:
    website:
    ---
+
+   Originally from ..., Firstname joined DYNAMO in ... (a short description: a sentence or two).
    ```
 
-   Without a photo, their initials are shown in a circle instead.
+   The text under the closing `---` is their short description, shown on their card. Without a photo,
+   their initials are shown in a circle instead.
 
    Don't add an `author_key:` line: only Tijana's name is shown in bold in author lists, and her file is
    the only one that has it (see [Publications](#publications)).
@@ -155,7 +160,12 @@ link, or a surname of more than one word).
 ### The PI profile
 
 Tijana's profile is `_members/prof-tijana-miseljic.md`, including the Education / Work experience /
-Awards rows under her card. Each row is a `year` and a `text`; the notes in the file show how to add one.
+Awards rows under her card. Each row is a `year` (optional) and a `text` (`**bold**` works), plus an optional
+`url` that makes the line a link; the notes in the file show how to add one.
+
+Grants are on the **Funding** page (in the Research menu), one card each, from `_data/grants.yml`, in the
+same order as the research projects. To add
+one, copy an entry there (the notes at the top explain each field).
 
 ---
 
@@ -170,6 +180,8 @@ News page, newest first. Each post also gets its own page.
    ```markdown
    ---
    title: "DYNAMO receives a new grant"
+   short_title:      # optional short title for the banner at the top, e.g. "New grant"; then the
+                     # full title is shown above the date instead
    date: 2027-03-02
    image:            # optional photo at the top, e.g. /images/news/2027-03-02-grant.jpg
    ---
@@ -355,14 +367,14 @@ own. To add one:
    text on the card) and the text below the settings.
 3. `icon:` picks the drawing on the card. There are four: `skin`, `nose`, `gut`, `sers`. New drawings
    need code changes (`_includes/research-icon.html`).
-4. Add it to the Research sub-menu in `_data/navigation.yml` (see below).
+4. Add it to the Research > Projects sub-menu in `_data/navigation.yml` (see below).
 
 ---
 
 ## Menu, contact page and footer
 
 - **Menu** (sidebar): `_data/navigation.yml`. Each entry is a `title` and a `url`; `children` makes a
-  sub-menu. Removing an entry hides it from the menu but doesn't delete the page.
+  sub-menu, and a sub-menu entry can have its own `children` (as Research > Projects does). Removing an entry hides it from the menu but doesn't delete the page.
 - **Contact page**: everything on it (address, map, open positions, who to email) is in the settings at
   the top of `_pages/contact.html`, with notes.
 - **Footer** text and logos: the `footer:` section near the top of `_config.yml`.

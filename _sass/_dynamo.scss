@@ -411,7 +411,7 @@ body {
   display: block;
 }
 
-.dyn-sidebar__item-wrap.is-open .dyn-sidebar__toggle i {
+.dyn-sidebar__item-wrap.is-open > .dyn-sidebar__row .dyn-sidebar__toggle i {
   transform: rotate(180deg);
 }
 
@@ -1083,6 +1083,15 @@ h2[id] {
 
 /* A news post's own page */
 .dyn-post {
+  /* the full title, shown here when the banner has the post's short_title */
+  .dyn-post__title {
+    margin: 0 0 0.3em;
+    padding: 0;
+    font-size: 1.5em;
+    line-height: 1.3;
+    border: 0;
+  }
+
   &__date {
     font-size: 0.9em;
     color: var(--global-text-color-light);
@@ -1133,6 +1142,77 @@ h2[id] {
     font-size: 0.85em;
     text-decoration: none;
     white-space: nowrap;
+  }
+}
+
+/* Funding page: one card per grant (light panel with a yellow edge): funder line, project title,
+   the facts as label / value rows, the project text, a link to the research area */
+.dyn-grants {
+  display: grid;
+  gap: 1.5em;
+}
+
+.dyn-grant {
+  padding: 1.4em 1.5em;
+  background: $dyn-tint;
+  border-left: 4px solid $dyn-accent;
+  border-radius: 4px;
+  scroll-margin-top: 4.5em; /* room for the phone top bar when opened from a /funding/#id link */
+
+  .dyn-grant__heading {
+    margin: 0 0 0.3em;
+    font-size: 0.78em;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--global-text-color-light);
+  }
+
+  .dyn-grant__title {
+    margin: 0 0 0.8em;
+    padding: 0;
+    font-size: 1.25em;
+    line-height: 1.3;
+    color: $dyn-primary;
+    border: 0;
+  }
+
+  .dyn-grant__facts {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.1em 1.5em;
+    margin: 0 0 1em;
+    font-size: 0.9em;
+
+    @include breakpoint($medium) {
+      grid-template-columns: 11em minmax(0, 1fr);
+      gap: 0.35em 1.5em;
+    }
+
+    dt {
+      margin: 0;
+      font-weight: bold;
+      color: $dyn-dark;
+    }
+
+    dd {
+      margin: 0 0 0.5em;
+
+      @include breakpoint($medium) {
+        margin: 0;
+      }
+    }
+  }
+
+  .dyn-grant__text p {
+    margin: 0 0 0.8em;
+    font-size: 0.95em;
+  }
+
+  .dyn-grant__more {
+    font-size: 0.88em;
+    font-weight: bold;
+    text-decoration: none;
   }
 }
 
@@ -1374,6 +1454,122 @@ h2[id] {
       margin: 0 0.3em;
       font-size: 1.2em;
       color: $dyn-primary;
+    }
+  }
+
+  /* wide cards (postdocs, Ph.D. students; `layout: wide` in member_sections), like bmm.kaist.ac.kr/members:
+     a navy line on top and a soft shadow; square photo on the left; name, then labelled "Current Research"
+     and "About", a small "Co-supervised with ..." line, and the links written out. One card per row, two on extra-large
+     screens (narrower, two cards would squeeze the text); on phones everything is stacked and centred */
+  .dyn-people__wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include breakpoint($x-large) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .dyn-people__wcard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 1.75em 1.25em;
+    text-align: center;
+    background: $dyn-bg;
+    border-top: 2px solid $dyn-primary;
+    box-shadow: 0 3px 14px rgba(17, 17, 17, 0.08);
+
+    @include breakpoint($small) {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 1.5em;
+      align-items: start;
+      padding: 1.75em;
+      text-align: left;
+    }
+  }
+
+  /* the photo, or the initials in the same square until there is one */
+  .dyn-people__wphoto {
+    display: block;
+    width: 140px;
+    max-width: 100%;
+    margin-bottom: 1em;
+    aspect-ratio: 1;
+    object-fit: cover;
+
+    @include breakpoint($small) {
+      width: 100%;
+      margin-bottom: 0;
+    }
+  }
+
+  .dyn-people__wphoto--empty {
+    @include dyn-initials(1.8em);
+  }
+
+  .dyn-people__label {
+    margin: 1em 0 0.1em;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: $dyn-primary;
+  }
+
+  .dyn-people__field,
+  .dyn-people__field p {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.55;
+  }
+
+  .dyn-people__field p {
+    font-size: 1em; /* already sized by the wrapper */
+  }
+
+  /* "Co-supervised with ...": small grey italics under the About text */
+  .dyn-people__wcosup {
+    margin: 0.6em 0 0;
+    font-size: 0.8em;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--global-text-color-light);
+  }
+
+  /* email as plain text ("name [at] dtu.dk", not a link), then any other links written out, one per line */
+  .dyn-people__wlinks {
+    margin: 1em 0 0;
+    font-size: 0.85em;
+
+    a,
+    .dyn-email-text {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+      justify-content: center;
+      margin: 0.2em 0 0;
+      color: $dyn-text;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+
+      @include breakpoint($small) {
+        justify-content: flex-start;
+      }
+
+      i {
+        color: $dyn-primary;
+      }
+    }
+
+    a:hover,
+    a:focus {
+      color: $dyn-primary;
+      text-decoration: underline;
     }
   }
 

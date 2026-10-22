@@ -54,7 +54,9 @@ hero:
       {% for block in p.details %}{% if block.items and block.items.size > 0 %}
       <section class="dyn-pi__block">
         <h4 class="dyn-pi__label">{{ block.title }}</h4>
-        <ul class="dyn-pi__list">{% for item in block.items %}<li><span class="dyn-pi__year">{{ item.year }}</span><span>{{ item.text }}</span></li>{% endfor %}</ul>
+        {% comment %} the year column is left out only when no line in the list has a year (e.g. Teaching) {% endcomment %}
+        {% assign has_years = false %}{% for item in block.items %}{% if item.year and item.year != "" %}{% assign has_years = true %}{% endif %}{% endfor %}
+        <ul class="dyn-pi__list">{% for item in block.items %}{% assign item_text = item.text | markdownify | remove: "<p>" | remove: "</p>" | strip %}<li>{% if has_years %}<span class="dyn-pi__year">{{ item.year }}</span>{% endif %}<span>{% if item.url %}<a href="{{ item.url | relative_url }}"{% if item.url contains '://' %} target="_blank" rel="noopener"{% endif %}>{{ item_text }}</a>{% else %}{{ item_text }}{% endif %}</span></li>{% endfor %}</ul>
       </section>
       {% endif %}{% endfor %}
     </article>
@@ -72,6 +74,25 @@ hero:
       </li>
       {% endfor %}
     </ul>
+  {% elsif section.layout == 'wide' %}
+    {% comment %} Main team members (postdocs, Ph.D. students): wide cards with a square photo on the left;
+      name (no role: the section heading already says it), then "Current Research" (`research:`) and
+      "About" (the text under the file's front matter), a small "Co-supervised with ..." line (`supervisors:`),
+      and the email as plain text ("name [at] dtu.dk", not a link) and other links written out {% endcomment %}
+    <ul class="dyn-people__wide">
+      {% for p in people %}
+      <li class="dyn-people__wcard">
+        {% include member-photo.html person=p class="dyn-people__wphoto" %}
+        <div class="dyn-people__wbody">
+          <h3 class="dyn-people__name">{% include member-name.html name=p.name last=p.last_name %}</h3>
+          {% if p.research %}<p class="dyn-people__label">Current Research</p><p class="dyn-people__field">{{ p.research }}</p>{% endif %}
+          {% assign bio = p.content | strip %}{% if bio != "" %}<p class="dyn-people__label">About</p><div class="dyn-people__field">{{ p.content | markdownify }}</div>{% endif %}
+          {% if p.co_supervised and p.supervisors %}<p class="dyn-people__wcosup">Co-supervised with {{ p.supervisors | join: ", " }}</p>{% endif %}
+          {% include member-links.html person=p class="dyn-people__wlinks" labels=true plain_email=true %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
   {% else %}
     <ul class="dyn-people__list">
       {% for p in people %}
@@ -80,7 +101,7 @@ hero:
         <div class="dyn-people__who">
           <h3 class="dyn-people__name">{% include member-name.html name=p.name last=p.last_name %}</h3>
           {% if p.role %}<p class="dyn-people__sub">{{ p.role }}</p>{% endif %}
-          {% if p.co_supervised %}<p class="dyn-people__cosup">Co-supervised{% if p.main_supervisor %} with<br>{{ p.main_supervisor }}{% endif %}</p>{% endif %}
+          {% if p.co_supervised %}<p class="dyn-people__cosup">Co-supervised{% if p.supervisors %} with<br>{{ p.supervisors | array_to_sentence_string }}{% endif %}</p>{% endif %}
           {% if p.research %}<p class="dyn-people__research">{{ p.research }}</p>{% endif %}
         </div>
         {% include member-links.html person=p class="dyn-people__icons" %}

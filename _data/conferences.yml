@@ -11,18 +11,36 @@
 #   pdf: /files/posters/file.pdf      # optional poster or slides on this site
 #   sample: true                      # TEMPORARY placeholder, shown with a "sample" tag: delete these entries
 
-- date: 2026-06-15
-  type: Talk
-  title: "Example talk title"
-  presenters: "**T. Maric**"
-  event: "Example Conference 2026"
-  location: "City, Country"
-  sample: true
 
-- date: 2025-09-10
-  type: Poster
-  title: "Example poster title"
-  presenters: "Z. Li, **T. Maric**"
-  event: "Example Symposium 2025"
-  location: "City, Country"
-  sample: true
+# Exact days not known yet: only the year is shown, but the day also sets the order within a year
+# (later first), so replace YYYY-01-01 with the real date when you have it.
+
+- date: 2026-01-01
+  type: Invited Talk
+  title: "Coherent Anti-Stokes Raman Scattering (CARS) Microscopy as a Smart Tool in Nano/Micromotors Research"
+  event: "Photonica 2026"
+  location: "Kopaonik, Serbia"
+
+- date: 2026-01-01
+  type: Oral Presentation
+  title: "CARS Microscopy as a Tool for Biomedical Imaging of Micromotors"
+  event: "MARSS"
+  location: "Hangzhou, China"
+
+- date: 2026-01-01
+  type: Invited Lecture
+  title: "Light-Driven Micromotors for Multiplex SERS Detection of Anticancer Drugs"
+  event: "Shanxi Medical University"
+  location: "Taiyuan, China"
+
+- date: 2026-01-01
+  type: Plenary Talk
+  title: "Micromotors for Multiplex SERS Detection of Anticancer Drugs"
+  event: "Future Innovations: Conference and Workshop"
+  location: "Brno, Czech Republic"
+
+- date: 2025-01-01
+  type: Poster Presentation
+  title: "Light-Driven Nanomotors for Eradication of Pseudomonas aeruginosa Biofilm"
+  event: "5th European Conference on Pharmaceutics"
+  location: "Porto, Portugal"

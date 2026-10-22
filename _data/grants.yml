@@ -1,0 +1,53 @@
+# Grants and funded projects, shown on the Funding page (/funding/), one card each. The cards follow the
+# order of the research projects they belong to (`research:` below; `order:` in _research/), and grants
+# without a research project come last, in this file's order.
+# Leave out any field you don't need.
+#
+# - id: short-name                    # anchor for links to this card: /funding/#short-name (letters, digits, -)
+#   heading: "Funder – Programme (2026–2029)"   # small line above the title
+#   project: "Title of the project"   # the card's title
+#   funding: "Funder – Programme (DKK 1 million)"
+#   role: "Principal Investigator (PI)"
+#   pi: "Name, institution"           # when the group is a partner and someone else leads the project
+#   host: "Technical University of Denmark (DTU), Denmark"
+#   description: >                    # the project text (a paragraph; Markdown allowed)
+#     What the project does ...
+#   research: /research/skin-and-wound-therapy/   # optional link to the related research area
+
+- id: leo-abildgaard
+  heading: "LEO Foundation – Dr. Abildgaard Fellowship (2027–2032)"
+  project: "Light-Activated Micromotors for Biofilm Eradication in Hidradenitis Suppurativa"
+  funding: "LEO Foundation – Dr. Abildgaard Fellowship (DKK 12 million)"
+  role: "Principal Investigator (PI)"
+  host: "Technical University of Denmark (DTU), Denmark"
+  description: >
+    This project aims to develop light-activated micromotors capable of navigating the complex skin tunnels
+    associated with hidradenitis suppurativa (HS) and disrupting persistent bacterial biofilms. By combining
+    advanced microfabrication, near-infrared light-driven propulsion, and clinically relevant skin models,
+    the research seeks to establish a novel, minimally invasive approach to treating chronic inflammatory
+    skin disease.
+  research: /research/skin-and-wound-therapy/
+
+- id: lundbeck-nose-to-brain
+  heading: "Lundbeck Foundation – Experiment Grant (2026–2029)"
+  project: "Micromotor-Powered Nose-to-Brain Drug Delivery"
+  funding: "Lundbeck Foundation – Experiment Grant (DKK 2.3 million)"
+  role: "Principal Investigator (PI)"
+  host: "Technical University of Denmark (DTU), Denmark"
+  description: >
+    This project explores the potential of self-propelled micro- and nanomotors to overcome biological
+    barriers and enhance direct drug delivery from the nasal cavity to the brain. By developing autonomous,
+    biocompatible micromotors, the research aims to improve the transport of therapeutic compounds to the
+    central nervous system, opening new possibilities for non-invasive treatment of neurological disorders.
+  research: /research/nose-to-brain-drug-delivery/
+
+- id: nimpha
+  heading: "SFRS–DIASPORA – NIMPHA"
+  project: "Near-infrared Light Driven Nanomotors for Photothermal Transport Across the Cell Membrane"
+  funding: "SFRS–DIASPORA, Republic of Serbia (approximately €20,000)"
+  role: "International Project Partner (Project Partner from Diaspora)"
+  pi: "Dr Dušan K. Božanić, Vinča Institute of Nuclear Sciences, University of Belgrade, Serbia"
+  description: >
+    The NIMPHA project aims to develop near-infrared light-driven nanomotors for enhanced intracellular drug
+    delivery, exploring their potential to transport therapeutic cargo directly across cell membranes while
+    bypassing conventional endosomal pathways.

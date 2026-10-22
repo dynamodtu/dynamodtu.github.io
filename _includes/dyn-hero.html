@@ -36,7 +36,8 @@
     {% if parent_page.hero.video or parent_page.hero.image %}{% assign hero_media = parent_page.hero %}{% endif %}
   {% endif %}
 {% endunless %}
-{% assign hero_title = hero.title | default: page.title %}
+{% comment %} a news post's `short_title`, when it has one, keeps a long title out of the banner {% endcomment %}
+{% assign hero_title = hero.title | default: page.short_title | default: page.title %}
 {% comment %} small label above the title: hero.kicker, else the page's `label` (research areas) or `kicker` (news posts) {% endcomment %}
 {% assign hero_kicker = hero.kicker | default: page.label | default: page.kicker %}
 {% assign hero_still = hero_media.poster | default: hero_media.image %}

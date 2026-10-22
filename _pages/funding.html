@@ -1,0 +1,45 @@
+---
+title: "Funding"
+permalink: /funding/
+hero: true
+---
+{% comment %}
+  The group's grants and funded projects from _data/grants.yml, one card each in the file's order.
+  The banner uses the Research video (the page is in the Research menu, _data/navigation.yml).
+{% endcomment %}
+{% include base_path %}
+
+{% comment %} Same order as the research projects (their `order`); grants without a research area come last {% endcomment %}
+{% assign areas = site.research | sort: "order" %}
+{% assign ordered = "" | split: "" %}
+{% for area in areas %}
+  {% for grant in site.data.grants %}{% if grant.research == area.url %}{% assign ordered = ordered | push: grant %}{% endif %}{% endfor %}
+{% endfor %}
+{% for grant in site.data.grants %}
+  {% assign matched = false %}
+  {% for area in areas %}{% if grant.research == area.url %}{% assign matched = true %}{% endif %}{% endfor %}
+  {% unless matched %}{% assign ordered = ordered | push: grant %}{% endunless %}
+{% endfor %}
+
+{% if ordered.size > 0 %}
+<div class="dyn-grants">
+  {% for grant in ordered %}
+  <article class="dyn-grant"{% if grant.id %} id="{{ grant.id }}"{% endif %}>
+    {% if grant.heading %}<p class="dyn-grant__heading">{{ grant.heading }}</p>{% endif %}
+    <h2 class="dyn-grant__title">{{ grant.project }}</h2>
+    <dl class="dyn-grant__facts">
+      {% if grant.funding %}<dt>Funding</dt><dd>{{ grant.funding }}</dd>{% endif %}
+      {% if grant.role %}<dt>Role</dt><dd>{{ grant.role }}</dd>{% endif %}
+      {% if grant.pi %}<dt>Principal Investigator</dt><dd>{{ grant.pi }}</dd>{% endif %}
+      {% if grant.host %}<dt>Host Institution</dt><dd>{{ grant.host }}</dd>{% endif %}
+    </dl>
+    {% if grant.description %}<div class="dyn-grant__text">{{ grant.description | markdownify }}</div>{% endif %}
+    {% if grant.research %}{% assign area = site.research | where: "url", grant.research | first %}
+    <a class="dyn-grant__more" href="{{ grant.research | relative_url }}">Research area: {% if area %}{{ area.title }}{% else %}learn more{% endif %} &rarr;</a>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="dyn-empty">Coming soon.</p>
+{% endif %}
