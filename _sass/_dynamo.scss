@@ -754,6 +754,7 @@ h2[id] {
 
   &__item a.dyn-news__title {
     font-size: 0.95em;
+    font-weight: 700;
     line-height: 1.45;
     color: $dyn-dark;
     text-decoration: none;
@@ -869,7 +870,8 @@ h2[id] {
 }
 
 /* latest news and recent publications side by side, both light panels like the page banners and the
-   collaborators strip, each only as tall as its content; stacked on smaller screens */
+   collaborators strip; side by side, both panels are as tall as the taller one, with the shorter one's
+   items spread out to fill it; stacked on smaller screens, each only as tall as its content */
 .dyn-duo {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* minmax(0, ...): a long one-line title must not widen the column past the screen */
@@ -879,10 +881,19 @@ h2[id] {
 
   @include breakpoint($large) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  &__col {
+    @include breakpoint($large) {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   &__panel {
     display: flex;
+    flex: 1 1 auto; /* fills the column, so both panels end at the same line */
     flex-direction: column;
     padding: 0.6em 2em 1.4em;
     color: $dyn-text;
@@ -897,6 +908,18 @@ h2[id] {
     margin: 0;
     padding: 0;
     list-style: none;
+
+    /* side by side: the list fills its panel and the items share the height evenly, so the shorter
+       panel's items grow (evenly spaced) instead of leaving empty space at the bottom */
+    @include breakpoint($large) {
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+
+      .dyn-duo__item {
+        flex: 1 1 auto;
+      }
+    }
   }
 
   .dyn-duo__item {
@@ -993,7 +1016,8 @@ h2[id] {
 
   a.dyn-duo__all {
     align-self: flex-start;
-    margin-top: 0.6em;
+    margin-top: auto; /* at the bottom of the panel, also when the panel is stretched */
+    padding-top: 0.6em;
     font-size: 0.85em;
     font-weight: bold;
     color: $dyn-primary;
@@ -1006,7 +1030,8 @@ h2[id] {
   }
 }
 
-/* collaborators: a light grey strip, heading and logos centred. Each logo (or name) sits in the middle of an
+/* collaborators: the heading (centred) above a light grey panel, like Latest News and Recent Publications,
+   the logos centred in it. Each logo (or name) sits in the middle of an
    equal slot: 4 per row on wide screens, 3 on laptops and tablets, 2 on phones; a last row that isn't full
    is centred too */
 .dyn-partners {
@@ -1014,16 +1039,22 @@ h2[id] {
   --dyn-logo-area: 6800;
 
   margin: 3em 0 0;
-  padding: 2.2em 2em 2.4em;
-  background: $dyn-tint;
 
   @media (max-width: #{$small - 1px}) {
     --dyn-logo-area: 3400;
-    padding: 1.6em 1.25em 1.8em;
   }
 
   .dyn-home__heading {
     text-align: center;
+  }
+
+  &__panel {
+    padding: 2.2em 2em 2.4em;
+    background: $dyn-tint;
+
+    @media (max-width: #{$small - 1px}) {
+      padding: 1.6em 1.25em 1.8em;
+    }
   }
 
   &__list {
@@ -1711,7 +1742,7 @@ h2[id] {
     font-size: 1.6em;
     font-weight: 300;
     border: 0;
-    color: $dyn-dark;
+    color: $dyn-primary; /* navy, like the home page headings */
 
     b {
       font-weight: 800;

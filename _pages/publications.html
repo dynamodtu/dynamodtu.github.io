@@ -24,7 +24,8 @@ hero:
 <div class="dyn-pubs">
 {% for category in site.publication_category %}
   <section class="dyn-pubs__category">
-    <h2 id="{{ category.key }}" class="dyn-pubs__cat">{{ category.title }}</h2>
+    {% comment %} the category heading only when there is more than one (with one, the banner says it all) {% endcomment %}
+    {% if site.publication_category.size > 1 %}<h2 id="{{ category.key }}" class="dyn-pubs__cat">{{ category.title }}</h2>{% endif %}
     {% assign items = pubs | where: "category", category.key %}
     {% for extra_key in category.also %}
       {% assign extra = pubs | where: "category", extra_key %}

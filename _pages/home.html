@@ -92,6 +92,7 @@ redirect_from:
 {% if site.data.collaborators and site.data.collaborators.size > 0 %}
 <section class="dyn-partners">
   <h2 class="dyn-home__heading">Our <b>Collaborators</b></h2>
+  <div class="dyn-partners__panel">
   <ul class="dyn-partners__list">
     {% for partner in site.data.collaborators %}
     <li class="dyn-partners__item">
@@ -103,5 +104,6 @@ redirect_from:
     </li>
     {% endfor %}
   </ul>
+  </div>
 </section>
 {% endif %}
