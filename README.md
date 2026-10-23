@@ -1,7 +1,7 @@
 # The DYNAMO website
 
 This repository is the website of **DYNAMO, the Dynamic Biomedical Devices Group** at the Technical
-University of Denmark (DTU): **https://dynamodtu.github.io**
+University of Denmark (DTU): **https://dynamodtu.com**
 
 This page explains how to keep the site up to date. You don't need to install anything or know how to
 code: every routine change is editing a text file or uploading a file, right here on github.com. The site
@@ -22,7 +22,7 @@ updates itself about a minute after you save.
 - [Menu, contact page and footer](#menu-contact-page-and-footer)
 - [Image and video sizes](#image-and-video-sizes)
 - [When something goes wrong](#when-something-goes-wrong)
-- [Access to this repository](#access-to-this-repository)
+- [Access to this repository](#access-to-this-repository), and [the domain name](#the-domain-name-dynamodtucom)
 - [Previewing on your own computer (optional)](#previewing-on-your-own-computer-optional)
 
 ---
@@ -424,6 +424,25 @@ two-factor recovery codes should be held by the group leader, so the site never 
 To let someone edit the site, the account owner adds their own GitHub account under **Settings →
 Collaborators → Add people**. Don't share the dynamodtu password with students; remove people from
 Collaborators when they leave.
+
+### The domain name (dynamodtu.com)
+
+The address **dynamodtu.com** is registered at [Porkbun](https://porkbun.com) and must be **renewed every
+year**: keep auto-renew on and the payment card up to date. If it lapses, the site can't be reached at
+that address. The Porkbun account that holds the domain should belong to the group (or the group leader),
+like the GitHub account.
+
+How it's connected, in case something needs fixing:
+
+- At Porkbun (the domain's **DNS records**): four `A` records for `dynamodtu.com` pointing to GitHub's
+  addresses `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`, and a `CNAME`
+  record for `www` pointing to `dynamodtu.github.io`. The `MX` and `TXT` records are Porkbun's e-mail
+  forwarding; they don't affect the website.
+- In this repository, the file **`CNAME`** contains `dynamodtu.com`: it tells GitHub the site's address.
+  Don't delete or rename it.
+- On GitHub, **Settings → Pages** shows the custom domain, with **Enforce HTTPS** ticked.
+
+The old address dynamodtu.github.io keeps working: it forwards to dynamodtu.com.
 
 ---
 

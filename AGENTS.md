@@ -1,6 +1,6 @@
 # Notes for coding agents (and anyone changing the code)
 
-This is the website of DYNAMO, the Dynamic Biomedical Devices Group at DTU: https://dynamodtu.github.io.
+This is the website of DYNAMO, the Dynamic Biomedical Devices Group at DTU: https://dynamodtu.com.
 It is a Jekyll site built by GitHub Pages from the `master` branch, started from the Academic Pages
 template (v0.9.x) and heavily customised. It is **not** a fork to send pull requests back to.
 
