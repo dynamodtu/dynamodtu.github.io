@@ -1,7 +1,7 @@
 ---
 name: Casper Nisula
 section: phd-students
-order: 1
+order: 2
 role: Ph.D. Student
 co_supervised: true
 supervisors:                # the other supervisors, one per line (main supervisor last)

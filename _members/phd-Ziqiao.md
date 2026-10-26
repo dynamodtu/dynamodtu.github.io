@@ -1,7 +1,7 @@
 ---
 name: Ziqiao Li
 section: phd-students
-order: 2
+order: 1
 role: Ph.D. Student
 co_supervised: true
 supervisors:                # the other supervisors, one per line (main supervisor last)

@@ -4,7 +4,7 @@
 # M.S., B.S. and special course students don't need a file: add one line to _members/students.md instead.
 name: Firstname Lastname
 section: phd-students       # pi | postdocs | phd-students | alumni (see member_sections in _config.yml)
-order: 1                    # position within the section (lower comes first)
+order: 1                    # position within the section: 1 = first (top left), then left to right, top to bottom. Give everyone in a section a different number
 role: Ph.D. Student
 co_supervised:              # true if Tijana is co-supervisor (then `supervisors` are shown on their card)
 supervisors:                # optional, with co_supervised: the other supervisors, one per line (main supervisor last),

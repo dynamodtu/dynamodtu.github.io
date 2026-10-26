@@ -112,7 +112,7 @@ Researchers**, **Ph.D. Students**, **M.S. Students**, **B.S. Students**, **Speci
    ---
    name: Firstname Lastname
    section: phd-students       # postdocs | phd-students | alumni
-   order: 4                    # position within the section, lower comes first
+   order: 4                    # position in the section: 1 = first (top left), then left to right, row by row
    role: Ph.D. Student
    co_supervised:              # true if Tijana is co-supervisor
    supervisors:                # with co_supervised: the other supervisors, one per line,
@@ -135,6 +135,13 @@ Researchers**, **Ph.D. Students**, **M.S. Students**, **B.S. Students**, **Speci
 
    Don't add an `author_key:` line: only Tijana's name is shown in bold in author lists, and her file is
    the only one that has it (see [Publications](#publications)).
+
+### The order of people in a section
+
+Each person's `order:` number sets their place in their section: `1` is the first card (top left), then
+the cards go left to right, row by row. **Give everyone in a section a different number**: with two the
+same, the site picks which comes first. To put someone new in the middle, renumber the people after them
+(e.g. to insert a new second person, the old 2 becomes 3, the old 3 becomes 4).
 
 ### Add M.S., B.S. or special course students
 
