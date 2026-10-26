@@ -1,5 +1,4 @@
 ---
-# TODO: research topic (still a placeholder)
 name: Marco Tjakra
 section: postdocs
 order: 1

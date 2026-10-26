@@ -1,6 +1,5 @@
 ---
 # One research area: its card on the Research page, and this page at /research/nose-to-brain-drug-delivery/.
-# TODO: check the texts; they are a first draft based on the group's papers.
 title: "Nose-to-brain drug delivery"
 label: Drug delivery          # small grey category above the title on the card
 icon: nose                 # drawing on the card: skin | nose | gut | sers (_includes/research-icon.html)

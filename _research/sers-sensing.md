@@ -1,6 +1,5 @@
 ---
 # One research area: its card on the Research page, and this page at /research/sers-sensing/.
-# TODO: check the texts; they are a first draft based on the group's papers.
 title: "SERS sensing"
 label: Diagnostics          # small grey category above the title on the card
 icon: sers                 # drawing on the card: skin | nose | gut | sers (_includes/research-icon.html)

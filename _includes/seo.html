@@ -139,9 +139,38 @@
   </script>
 {% endif %}
 
+{% comment %}
+  DYNAMO: the picture shown when a page is shared (LinkedIn, Teams, WhatsApp, Facebook...): a news post's own
+  photo (`image:`), else the site's default (`og_image` in _config.yml: a file in /images/, 1200 x 630 px).
+{% endcomment %}
+{% assign og_img = nil %}
+{% assign og_img_default = false %}
 {% if page.header.image %}
-  <meta property="og:image" content="{% if page.header.image contains "://" %}{{ page.header.image }}{% else %}{{ page.header.image | prepend: "/images/" | prepend: base_path }}{% endif %}">
+  {% assign og_img = page.header.image %}
 {% elsif page.header.overlay_image %}
-  <meta property="og:image" content="{% if page.header.overlay_image contains "://" %}{{ page.header.overlay_image }}{% else %}{{ page.header.overlay_image | prepend: "/images/" | prepend: base_path }}{% endif %}">
+  {% assign og_img = page.header.overlay_image %}
+{% elsif page.image %}
+  {% assign og_img = page.image %}
+{% elsif site.og_image %}
+  {% assign og_img = site.og_image %}
+  {% assign og_img_default = true %}
+{% endif %}
+{% if og_img %}
+  {% assign og_img_first = og_img | slice: 0 %}
+  {% if og_img contains "://" %}
+    {% assign og_img_url = og_img %}
+  {% elsif og_img_first == "/" %}
+    {% assign og_img_url = og_img | prepend: base_path %}
+  {% else %}
+    {% assign og_img_url = og_img | prepend: "/images/" | prepend: base_path %}
+  {% endif %}
+  <meta property="og:image" content="{{ og_img_url }}">
+  {% if og_img_default %}
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ site.og_image_alt | default: site.title | escape }}">
+  {% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ og_img_url }}">
 {% endif %}
 <!-- end Open Graph protocol -->

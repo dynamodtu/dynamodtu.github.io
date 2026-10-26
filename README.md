@@ -385,6 +385,9 @@ own. To add one:
 - **Contact page**: everything on it (address, map, open positions, who to email) is in the settings at
   the top of `_pages/contact.html`, with notes.
 - **Footer** text and logos: the `footer:` section near the top of `_config.yml`.
+- **Link preview picture** (shown when a page is shared on LinkedIn, Teams, WhatsApp...):
+  `images/og-image.png`, 1200 × 630 px. To change it, upload a new picture with the same name and size.
+  News posts with an `image:` show their own photo instead.
 
 ---
 

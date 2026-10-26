@@ -1,6 +1,5 @@
 ---
 # One research area: its card on the Research page, and this page at /research/skin-and-wound-therapy/.
-# TODO: check the texts; they are a first draft based on the group's papers.
 title: "Skin & wound therapy"
 label: Therapy          # small grey category above the title on the card
 icon: skin                 # drawing on the card: skin | nose | gut | sers (_includes/research-icon.html)

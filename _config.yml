@@ -205,7 +205,8 @@ facebook:
   username               :
   app_id                 :
   publisher              :
-og_image                 :  # Social media default site image
+og_image                 : "og-image.png"   # picture shown when a page is shared (LinkedIn, Teams, WhatsApp...): a file in /images/, 1200 x 630 px. News posts with an `image:` use their own
+og_image_alt             : "DYNAMO – Dynamic Biomedical Devices, Technical University of Denmark (DTU)"
 og_description           :  # Social media default site image description
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
