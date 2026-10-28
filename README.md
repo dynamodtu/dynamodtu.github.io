@@ -96,8 +96,10 @@ and most of `_config.yml`. They hold the site's design and code, not its content
 ## Members
 
 The Members page has these sections, in this order: **Principal Investigator**, **Postdoctoral
-Researchers**, **Ph.D. Students**, **M.S. Students**, **B.S. Students**, **Special Course Students**,
-**Alumni**.
+Researchers**, **Ph.D. Students**, **Alumni** (former postdocs and Ph.D. students), then **Supervised M.S.
+Theses**, **Supervised B.S. Projects** and **Supervised Special Courses**: everyone who has done such a
+project with Tijana, past and present, as a track record. Short-term students stay in these lists when they
+finish; they don't move to Alumni.
 
 ### Add a postdoc or Ph.D. student
 
@@ -159,9 +161,14 @@ link, or a surname of more than one word).
 
 ### Someone leaves
 
-- **Postdoc or Ph.D. student:** in their file in `_members/`, change `section:` to `alumni`. You can update
-  `role:` too, e.g. `role: "Ph.D. 2027, now at Novo Nordisk"`.
-- **M.S., B.S. or special course student:** delete their line from `_members/students.md`.
+- **Postdoc or Ph.D. student:** in their file in `_members/`, change `section:` to `alumni` and `role:` to
+  e.g. `role: "Ph.D. 2027"`. When they have a new job, add `position: "Research Scientist, Novo Nordisk"`:
+  it is shown as "Current Position" on their card (alumni cards don't show the "About" text). For a Ph.D.,
+  also add `thesis: "Title of the thesis"`. Remove their
+  `email:` line too: their DTU address stops working after they leave (add `linkedin:` with their profile
+  address instead, if they like).
+- **M.S., B.S. or special course student:** nothing to do: they stay in their list in `_members/students.md`
+  (the lists are a record of everyone supervised). Delete their line only to remove them from the site.
 - **Removing someone completely:** delete their file in `_members/` (and their photo).
 
 ### The PI profile
@@ -213,8 +220,10 @@ them and links there.
 2. **The Contact page** (where the home page's *Join us* button leads): in `_pages/contact.html`, the
    `intro:` text under `applications:` names the open positions with links to their posts, e.g.
    `**[Postdoc](/news/2026-10-18-hiring-postdoc/)** (apply by 26 October 2026)`.
-3. **After the deadline:** take the positions out of the Contact page `intro:`, and either delete the news
-   post or add a line at its top: `**This position has been filled.**`
+3. **After the deadline:** take the positions out of the Contact page `intro:`, and in the news post add
+   `closed: true` to the settings at the top (a grey "Closed" label then appears next to its title) and
+   change its first line to say the position is closed, e.g. `**This position is closed: the application
+   deadline was 26 October 2026.**` Or delete the post.
 
 To show an e-mail address in a post without exposing it to spam robots, write
 `{% include email-link.html address="name@dtu.dk" show=true %}` instead of the address.

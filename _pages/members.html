@@ -75,18 +75,25 @@ hero:
       {% endfor %}
     </ul>
   {% elsif section.layout == 'wide' %}
-    {% comment %} Main team members (postdocs, Ph.D. students): wide cards with a square photo on the left;
-      name (no role: the section heading already says it), then "Current Research" (`research:`) and
+    {% comment %} Main team members (postdocs, Ph.D. students) and alumni: wide cards with a square photo on the
+      left; name (no role: the section heading already says it), then "Current Research" (`research:`) and
       "About" (the text under the file's front matter), a small "Co-supervised with ..." line (`supervisors:`),
-      and the email as plain text ("name [at] dtu.dk", not a link) and other links written out {% endcomment %}
+      and the email as plain text ("name [at] dtu.dk", not a link) and other links written out.
+      Alumni instead show their role under the name (e.g. "Ph.D. 2026") and "Current Position" (`position:`,
+      hidden until filled in) in place of "Current Research", their "Ph.D. Thesis" (`thesis:`, plain text),
+      and no "About" {% endcomment %}
     <ul class="dyn-people__wide">
       {% for p in people %}
       <li class="dyn-people__wcard">
         {% include member-photo.html person=p class="dyn-people__wphoto" %}
         <div class="dyn-people__wbody">
           <h3 class="dyn-people__name">{% include member-name.html name=p.name last=p.last_name %}</h3>
-          {% if p.research %}<p class="dyn-people__label">Current Research</p><p class="dyn-people__field">{{ p.research }}</p>{% endif %}
-          {% assign bio = p.content | strip %}{% if bio != "" %}<p class="dyn-people__label">About</p><div class="dyn-people__field">{{ p.content | markdownify }}</div>{% endif %}
+          {% if section.id == 'alumni' %}
+          {% if p.role %}<p class="dyn-people__sub">{{ p.role }}</p>{% endif %}
+          {% if p.position %}<p class="dyn-people__label">Current Position</p><p class="dyn-people__field">{{ p.position }}</p>{% endif %}
+          {% if p.thesis %}<p class="dyn-people__label">Ph.D. Thesis</p><p class="dyn-people__field dyn-people__field--small">{{ p.thesis }}</p>{% endif %}
+          {% elsif p.research %}<p class="dyn-people__label">Current Research</p><p class="dyn-people__field">{{ p.research }}</p>{% endif %}
+          {% assign bio = p.content | strip %}{% if bio != "" and section.id != 'alumni' %}<p class="dyn-people__label">About</p><div class="dyn-people__field">{{ p.content | markdownify }}</div>{% endif %}
           {% if p.co_supervised and p.supervisors %}<p class="dyn-people__wcosup">Co-supervised with {{ p.supervisors | join: ", " }}</p>{% endif %}
           {% include member-links.html person=p class="dyn-people__wlinks" labels=true plain_email=true %}
         </div>

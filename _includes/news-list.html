@@ -9,7 +9,7 @@
 <ul class="dyn-news">
   {% for post in posts limit: news_limit %}
   <li class="dyn-news__item">
-    <a class="dyn-news__title" href="{{ base_path }}{{ post.url }}">{{ post.title }}</a>
+    <a class="dyn-news__title" href="{{ base_path }}{{ post.url }}">{{ post.title }}</a>{% if post.closed %} <span class="dyn-closed">Closed</span>{% endif %}
     <time class="dyn-news__date" datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%B %-d, %Y" }}</time>
     <a class="dyn-news__more" href="{{ base_path }}{{ post.url }}" aria-label="Read more: {{ post.title | escape }}">Read more &rarr;</a>
   </li>

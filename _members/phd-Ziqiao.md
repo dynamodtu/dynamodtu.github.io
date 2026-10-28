@@ -1,14 +1,15 @@
 ---
 name: Ziqiao Li
-section: phd-students
+section: alumni
 order: 1
-role: Ph.D. Student
+role: "Ph.D. 2026"
+position:                   # where they work now, e.g. "Research Scientist, Samsung" (shown as "Current Position")
+thesis: "Toward Active Oral Drug Delivery: From Micromotors to Self-Catapulting Ingestible Devices"
 co_supervised: true
 supervisors:                # the other supervisors, one per line (main supervisor last)
   - "Zhongyang Zhang"
   - "Anja Boisen"
 research: "Oral drug delivery"
-email: ziqli@dtu.dk
 photo: /images/members/ziqiao-li.jpg
 ---
 

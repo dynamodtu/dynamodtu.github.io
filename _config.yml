@@ -140,18 +140,20 @@ member_sections:
   - id: phd-students
     title: Ph.D. Students
     layout: wide
-  - id: masters
-    title: M.S. Students
-    layout: list
-  - id: bachelors
-    title: B.S. Students
-    layout: list
-  - id: special-course
-    title: Special Course Students
-    layout: list
   - id: alumni
     title: Alumni
+    layout: wide              # like the current team, with "Current Position" (`position:`) instead of research
     empty: No alumni yet.
+  # past and present short-term students, as a track record (not a headcount)
+  - id: masters
+    title: Supervised M.S. Theses
+    layout: list
+  - id: bachelors
+    title: Supervised B.S. Projects
+    layout: list
+  - id: special-course
+    title: Supervised Special Courses
+    layout: list
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/ for social media previews

@@ -1,7 +1,7 @@
 ---
 name: Erick Chica
 section: phd-students
-order: 3
+order: 2
 role: Ph.D. Student
 co_supervised: true
 supervisors:                # the other supervisors, one per line (main supervisor last)

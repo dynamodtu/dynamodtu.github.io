@@ -1112,6 +1112,30 @@ h2[id] {
   }
 }
 
+/* "Closed" label after a news title (`closed: true`, e.g. a position whose deadline has passed):
+   a small grey pill, like the yellow "Cover Feature" one on Publications but quiet */
+.dyn-closed {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0.05em 0.6em;
+  font-size: 0.72em;
+  font-weight: bold;
+  font-style: normal;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  vertical-align: 0.1em;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--global-text-color-light);
+  border-radius: 999px;
+}
+
+/* A closed post (`closed: true`): the first paragraph (the "This position is closed" note) as usual,
+   everything after it greyed out, still readable for reference */
+.dyn-post__body--closed > :not(:first-child) {
+  opacity: 0.5;
+}
+
 /* A news post's own page */
 .dyn-post {
   /* the full title, shown here when the banner has the post's short_title */
@@ -1561,6 +1585,12 @@ h2[id] {
 
   .dyn-people__field p {
     font-size: 1em; /* already sized by the wrapper */
+  }
+
+  /* longer secondary text, e.g. an alumnus's thesis title */
+  .dyn-people__field--small {
+    font-size: 0.8em;
+    line-height: 1.5;
   }
 
   /* "Co-supervised with ...": small grey italics under the About text */
