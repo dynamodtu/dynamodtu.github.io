@@ -1,12 +1,12 @@
 ---
 title: "We're hiring a Postdoc"
 date: 2026-10-18 12:00
-closed: true          # the position is filled or the deadline passed: shows a "Closed" label
+position: "Postdoc"            # how the Contact page names it while it is open
+deadline: 2026-10-26           # last day to apply (23:59 Danish time); closes on its own after it
 image:
 ---
 
-**This position is closed: the application deadline was 26 October 2026.**
-[The full call on DTU's job portal](https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/8408).
+[Read the full call and apply on DTU's job portal](https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/8408).
 
 Are you passionate about microrobotics, nanotechnology and innovative biomedical technologies? We are
 looking for a motivated postdoc to develop near-infrared (NIR) light-driven micromotors that break through

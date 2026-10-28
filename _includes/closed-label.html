@@ -1,0 +1,11 @@
+{%- comment -%}
+  The grey "Closed" label after a news title: for a post with `closed: true`, or one whose `deadline:` has
+  passed (hidden until then, and shown by assets/js/dyn-deadlines.js on the day after the deadline).
+  Param: post (news post document)
+{%- endcomment -%}
+{%- include deadline-state.html post=include.post -%}
+{%- if include.post.closed -%}
+ <span class="dyn-closed">Closed</span>
+{%- elsif dl_date != "" -%}
+ <span class="dyn-closed" data-deadline="{{ dl_date }}" data-when="closed"{% unless dl_closed %} hidden{% endunless %}>Closed</span>
+{%- endif -%}

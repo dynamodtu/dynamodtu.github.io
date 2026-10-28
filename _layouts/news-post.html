@@ -4,8 +4,8 @@ layout: default
 {% comment %}
   One news post (a file in _news/): the banner shows "News" and the title (or `short_title`, when the post
   has one: then the full title is shown here, above the date), then the date, the optional photo (`image:`),
-  the text, and a link back to all news. A post with `closed: true` gets a "Closed" label, and all its text
-  after the first paragraph (the note that the position is closed) is greyed out, kept for reference.
+  the text, and a link back to all news. An open position (`deadline:`) gets the deadline sentence at the top; after the deadline
+  (or with `closed: true`) a "Closed" label and "This position is closed", and its text is greyed out.
 {% endcomment %}
 {% include base_path %}
 <div id="main" role="main">
@@ -13,9 +13,20 @@ layout: default
     <div class="page__inner-wrap">
       <section class="page__content dyn-post">
         {% if page.short_title %}<h2 class="dyn-post__title">{{ page.title }}</h2>{% endif %}
-        <p class="dyn-post__date"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%B %-d, %Y" }}</time>{% if page.closed %} <span class="dyn-closed">Closed</span>{% endif %}</p>
+        <p class="dyn-post__date"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%B %-d, %Y" }}</time>{% include closed-label.html post=page %}</p>
         {% if page.image %}<img class="dyn-post__image" src="{{ page.image | relative_url }}" alt="">{% endif %}
-        {% if page.closed %}<div class="dyn-post__body dyn-post__body--closed">{{ content }}</div>{% else %}{{ content }}{% endif %}
+        {% include deadline-state.html post=page %}
+        {% if page.closed %}
+        <p class="dyn-post__deadline"><strong>This position is closed.</strong></p>
+        <div class="dyn-post__body dyn-post__body--closed">{{ content }}</div>
+        {% elsif dl_date != "" %}
+        {% comment %} An open position: the deadline sentence while open, "closed" after it (switched in the browser by dyn-deadlines.js) {% endcomment %}
+        <p class="dyn-post__deadline" data-deadline="{{ dl_date }}" data-when="open"{% if dl_closed %} hidden{% endif %}><strong>Application deadline: {{ page.deadline | date: "%-d %B %Y" }} (23:59 Danish time).</strong></p>
+        <p class="dyn-post__deadline" data-deadline="{{ dl_date }}" data-when="closed"{% unless dl_closed %} hidden{% endunless %}><strong>This position is closed: the application deadline was {{ page.deadline | date: "%-d %B %Y" }}.</strong></p>
+        <div class="dyn-post__body{% if dl_closed %} dyn-post__body--closed{% endif %}" data-deadline="{{ dl_date }}" data-closed-class="dyn-post__body--closed">{{ content }}</div>
+        {% else %}
+        {{ content }}
+        {% endif %}
         <p class="dyn-post__back"><a href="{{ base_path }}/news/">&larr; All news</a></p>
       </section>
     </div>

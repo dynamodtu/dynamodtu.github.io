@@ -1,10 +1,11 @@
 ---
 title: "We're hiring a Ph.D. student"
 date: 2026-10-18 11:00
+position: "Ph.D. student"      # how the Contact page names it while it is open
+deadline: 2026-11-03           # last day to apply (23:59 Danish time); closes on its own after it
 image:
 ---
 
-**Application deadline: 3 November 2026 (23:59 Danish time).**
 [Read the full call and apply on DTU's job portal](https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/8398).
 
 Would you like to do a Ph.D. at the interface of micro/nanotechnology, biomaterials and biomedical

@@ -213,17 +213,23 @@ The address of the post is `/news/` plus the file name without `.md`, so pick a 
 Official DTU positions (Ph.D., postdoc) are applied for through DTU's job portal; the website announces
 them and links there.
 
-1. **A news post** with the announcement, e.g. `_news/2026-10-18-hiring-postdoc.md`: a short title
-   ("We're hiring a Postdoc": the home page shows titles on one line), the deadline and the link to the
-   DTU job ad at the top, then the project, tasks, requirements and how to apply. Copy one of the
-   existing hiring posts and change it.
-2. **The Contact page** (where the home page's *Join us* button leads): in `_pages/contact.html`, the
-   `intro:` text under `applications:` names the open positions with links to their posts, e.g.
-   `**[Postdoc](/news/2026-10-18-hiring-postdoc/)** (apply by 26 October 2026)`.
-3. **After the deadline:** take the positions out of the Contact page `intro:`, and in the news post add
-   `closed: true` to the settings at the top (a grey "Closed" label then appears next to its title) and
-   change its first line to say the position is closed, e.g. `**This position is closed: the application
-   deadline was 26 October 2026.**` Or delete the post.
+1. **A news post** with the announcement, e.g. `_news/2026-10-18-hiring-phd.md`: a short title
+   ("We're hiring a Ph.D. student": the home page shows titles on one line), the link to the DTU job ad at
+   the top, then the project, tasks, requirements and how to apply. Copy one of the existing hiring posts
+   and change it. In its settings at the top, set:
+
+   ```yaml
+   position: "Ph.D. student"   # how the Contact page names it
+   deadline: 2026-11-03        # the last day to apply (23:59 Danish time)
+   ```
+
+2. **That's all.** The post shows "Application deadline: 3 November 2026 (23:59 Danish time)" at the top,
+   and the Contact page (where the home page's *Join us* button leads) lists the position with a link to
+   the post. **After the deadline it closes on its own**: the Contact page no longer lists it, and the post
+   gets a grey "Closed" label, says "This position is closed" and is greyed out. The site checks the date
+   in the visitor's browser, so this happens on the day after the deadline even if nobody changes the site.
+3. **Closing it early** (e.g. the position is filled): add `closed: true` to the post's settings. Or
+   delete the post.
 
 To show an e-mail address in a post without exposing it to spam robots, write
 `{% include email-link.html address="name@dtu.dk" show=true %}` instead of the address.

@@ -1130,9 +1130,17 @@ h2[id] {
   border-radius: 999px;
 }
 
-/* A closed post (`closed: true`): the first paragraph (the "This position is closed" note) as usual,
-   everything after it greyed out, still readable for reference */
-.dyn-post__body--closed > :not(:first-child) {
+.dyn-closed[hidden] {
+  display: none;
+}
+
+/* An open position's deadline sentence, or "This position is closed", above the text of the post */
+.dyn-post__deadline {
+  margin-bottom: 0.4em;
+}
+
+/* A closed position: the text greyed out, still readable for reference */
+.dyn-post__body--closed > * {
   opacity: 0.5;
 }
 
@@ -1759,6 +1767,15 @@ h2[id] {
   .dyn-contact__map .dyn-contact__map-link {
     margin: 0.5em 0 0;
     font-size: $type-size-6;
+  }
+
+  /* the open positions (listed from the news posts with a `deadline:`) */
+  .dyn-contact__positions ul {
+    margin: 0 0 1em;
+  }
+
+  .dyn-contact__positions[hidden] {
+    display: none;
   }
 
   .dyn-contact__block + .dyn-contact__block {

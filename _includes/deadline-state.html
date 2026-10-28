@@ -1,0 +1,17 @@
+{%- comment -%}
+  Whether a news post (an open position) is closed. Sets, for the page that includes it:
+    dl_date   - the post's `deadline:` as YYYY-MM-DD, or "" when it has none
+    dl_closed - true when the post has `closed: true`, or its deadline was before the day the site was built
+  The site is only rebuilt when something is pushed, so assets/js/dyn-deadlines.js checks the deadline again
+  in the visitor's browser (elements with data-deadline), and closes the position on the day after it.
+  Param: post (news post document)
+{%- endcomment -%}
+{%- assign dl_date = "" -%}
+{%- assign dl_closed = false -%}
+{%- if include.post.deadline -%}{%- assign dl_date = include.post.deadline | date: "%Y-%m-%d" -%}{%- endif -%}
+{%- assign dl_today = site.time | date: "%Y-%m-%d" -%}
+{%- if include.post.closed -%}
+  {%- assign dl_closed = true -%}
+{%- elsif dl_date != "" and dl_today > dl_date -%}
+  {%- assign dl_closed = true -%}
+{%- endif -%}

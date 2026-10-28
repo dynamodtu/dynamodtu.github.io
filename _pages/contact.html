@@ -14,11 +14,11 @@ map:                           # Google map (free embed, no API key)
   query: "55.781499,12.51797"  # coordinates (DTU building 345) give a plain pin; a place name, e.g. "DTU Health Tech", adds Google's info card
   zoom: 14                    # higher = closer (15 shows more of the campus, 17 just the building)
 applications:
-  # optional text above "Send directly to ...", e.g. the open positions. Links as in news posts: [text](/news/...).
-  # Remove the open positions again once their deadline has passed.
+  # The open positions are listed automatically above this text: every news post with a `deadline:` that
+  # hasn't passed (named by its `position:`), and they disappear on their own after the deadline.
+  # optional text above "Send directly to ...". Links as in news posts: [text](/news/...).
   intro: >
-    We are currently hiring a **[Ph.D. student](/news/2026-10-18-hiring-phd/)** (apply by 3 November 2026).
-    Apply through DTU's job portal, linked in the announcement. For anything else, such as M.Sc. projects:
+    For M.Sc. projects and anything else:
   name: "Tijana"
   email: "tijma@dtu.dk"
 ---
@@ -49,6 +49,22 @@ applications:
 
     <section class="dyn-contact__block" id="join">
       <h2 class="dyn-contact__title"><b>Position</b> applications</h2>
+      {% comment %} Open positions: news posts with a `deadline:` not yet passed when the site was built, soonest
+        deadline first; assets/js/dyn-deadlines.js hides each one after its deadline, and the whole list when none is left {% endcomment %}
+      {% assign open_positions = "" | split: "" %}
+      {% assign dated_posts = site.news | where_exp: "post", "post.deadline" | sort: "deadline" %}
+      {% for post in dated_posts %}{% include deadline-state.html post=post %}{% unless dl_closed %}{% assign open_positions = open_positions | push: post %}{% endunless %}{% endfor %}
+      {% if open_positions.size > 0 %}
+      <div class="dyn-contact__positions" data-deadline-group>
+        <p>We are currently hiring:</p>
+        <ul>
+          {% for post in open_positions %}
+          <li data-deadline="{{ post.deadline | date: '%Y-%m-%d' }}" data-when="open"><b><a href="{{ base_path }}{{ post.url }}">{{ post.position | default: post.title }}</a></b> (apply by {{ post.deadline | date: "%-d %B %Y" }})</li>
+          {% endfor %}
+        </ul>
+        <p>Apply through DTU's job portal, linked in each announcement.</p>
+      </div>
+      {% endif %}
       {% if page.applications.intro %}{{ page.applications.intro | markdownify }}{% endif %}
       {% if page.applications.email %}
       <p>Send directly to {{ page.applications.name }}:<br>
